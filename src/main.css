@@ -1,0 +1,18 @@
+@import 'nprogress/nprogress.css';
+@import '@unocss/reset/tailwind-compat.css';
+
+#nprogress .bar {
+  background: #d61f69;
+}
+
+.linear-bg-yellow {
+  background: linear-gradient(180deg, #fff3b4 0%, rgba(255, 243, 180, 0) 100%);
+}
+
+.linear-bg-gray {
+  background: linear-gradient(180deg, #e5e7eb 0%, rgba(229, 231, 235, 0) 100%);
+}
+
+.linear-bg-orange {
+  background: linear-gradient(180deg, #f8e1ce 0%, rgba(248, 225, 206, 0) 100%);
+}

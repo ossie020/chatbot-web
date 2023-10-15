@@ -1,0 +1,29 @@
+{
+  "name": "chatbot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@unocss/reset": "^0.56.5",
+    "antd": "^5.10.1",
+    "nprogress": "^0.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-router-dom": "^6.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.6",
+    "@types/nprogress": "^0.2.1",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "prettier": "^3.0.3",
+    "typescript": "^5.0.2",
+    "unocss": "^0.56.5",
+    "vite": "^4.4.5"
+  }
+}
