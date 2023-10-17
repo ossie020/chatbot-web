@@ -10,10 +10,10 @@ export function RecentlyChatted() {
   }))
 
   return (
-    <div className="w-342px p-6 border border-pink-400 rounded-xl">
-      <div className="flex items-center mb-4">
-        <img src={Messages} className="w-8 h-8" />
-        <p className="ml-2 text-xl text-pink-500 font-bold">Recently Chatted</p>
+    <div className="w-342px border border-pink-400 rounded-xl p-6">
+      <div className="mb-4 flex items-center">
+        <img src={Messages} className="h-8 w-8" />
+        <p className="ml-2 text-xl font-bold text-pink-500">Recently Chatted</p>
       </div>
 
       <Items list={list} />

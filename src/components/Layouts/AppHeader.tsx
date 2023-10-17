@@ -10,26 +10,26 @@ export function AppHeader() {
   const [open, setOpen] = useState(false)
 
   return (
-    <nav className="sticky w-full h-20 top-0 left-0 z-20 bg-white border-b border-gray-200">
-      <div className="p-4 h-full flex items-center justify-between">
+    <nav className="sticky left-0 top-0 z-20 h-20 w-full border-b border-gray-200 bg-white">
+      <div className="h-full flex items-center justify-between p-4">
         <div>logo</div>
         <div className="flex">
-          <div className="w-360px h-45px">
+          <div className="h-45px w-360px">
             <Input
-              prefix={<HiSearch className="w-20px h-20px" />}
+              prefix={<HiSearch className="h-20px w-20px" />}
               className="h-full rounded-full"
             />
           </div>
           <Button
             shape="circle"
-            className="w-12 h-12 ml-3 font-bold text-pink-500 bg-gradient-to-r from-pink-300 to-yellow-100 border border-pink-500"
+            className="ml-3 h-12 w-12 border border-pink-500 from-pink-300 to-yellow-100 bg-gradient-to-r font-bold text-pink-500"
           >
             Pro
           </Button>
           <Button
-            icon={<HiUserCircle className="w-6 h-6" />}
+            icon={<HiUserCircle className="h-6 w-6" />}
             shape="round"
-            className="ml-3 w-30 h-12 font-bold text-pink-500 flex items-center justify-center border border-pink-500 hover:bg-pink-100"
+            className="ml-3 h-12 w-30 flex items-center justify-center border border-pink-500 font-bold text-pink-500 hover:bg-pink-100"
             onClick={() => setOpen(true)}
           >
             Login
@@ -38,26 +38,26 @@ export function AppHeader() {
       </div>
 
       <Modal width={420} footer={null} open={open} onCancel={() => setOpen(false)}>
-        <div className="w-324px mx-auto flex flex-col justify-center">
-          <div className="text-center mb-6">logo</div>
+        <div className="mx-auto w-324px flex flex-col justify-center">
+          <div className="mb-6 text-center">logo</div>
 
           <Space direction="vertical" size={8}>
-            <Button className="w-full h-12 flex items-center justify-center">
+            <Button className="h-12 w-full flex items-center justify-center">
               <img src={Google} />
               <p className="ml-2 font-medium">Continue with Google</p>
             </Button>
-            <Button className="w-full h-12 flex items-center justify-center">
+            <Button className="h-12 w-full flex items-center justify-center">
               <img src={Discord} />
               <p className="ml-2 font-medium">Continue with Discord</p>
             </Button>
-            <Button className="w-full h-12 flex items-center justify-center">
+            <Button className="h-12 w-full flex items-center justify-center">
               <img src={Apple} />
               <p className="ml-2 font-medium">Continue with Apple</p>
             </Button>
 
-            <div className="w-full h-12 flex flex-col items-center justify-center">
-              <div className="relative top-13px w-full h-1px bg-black/20"></div>
-              <div className="w-12 text-center text-black/40 bg-white z-20">OR</div>
+            <div className="h-12 w-full flex flex-col items-center justify-center">
+              <div className="relative top-13px h-1px w-full bg-black/20"></div>
+              <div className="z-20 w-12 bg-white text-center text-black/40">OR</div>
             </div>
 
             <Form>
@@ -72,7 +72,7 @@ export function AppHeader() {
                   className="h-13"
                 />
               </Form.Item>
-              <Button type="primary" className="w-full h-13">
+              <Button type="primary" className="h-13 w-full">
                 Log in / Sign up
               </Button>
               <Button type="link" className="w-full text-12px">

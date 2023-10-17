@@ -27,10 +27,10 @@ export function TopCharacters() {
   }))
 
   return (
-    <div className="mt-4 w-342px p-6 border border-pink-400 rounded-xl">
+    <div className="mt-4 w-342px border border-pink-400 rounded-xl p-6">
       <div className="flex items-center">
-        <img src={Badge} className="w-8 h-8" />
-        <p className="ml-2 text-xl text-pink-500 font-bold">Top Characters</p>
+        <img src={Badge} className="h-8 w-8" />
+        <p className="ml-2 text-xl font-bold text-pink-500">Top Characters</p>
       </div>
 
       <TopItems list={topList} />

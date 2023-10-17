@@ -14,7 +14,7 @@ export function CharacterCards() {
   }))
 
   return (
-    <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
+    <div className="grid gap-4 lg:grid-cols-2 md:grid-cols-1 xl:grid-cols-4">
       {list.map((item, i) => (
         <Card key={`${i}`} {...item} />
       ))}

@@ -24,11 +24,11 @@ export function TopItems({ list }: Props) {
             index,
           )} hover:cursor-pointer`}
         >
-          <img src={img} className="w-14 h-14 rounded" />
-          <div className="h-14 flex-1 ml-2.5 flex items-center justify-between">
+          <img src={img} className="h-14 w-14 rounded" />
+          <div className="ml-2.5 h-14 flex flex-1 items-center justify-between">
             <div className="flex-1">
               <p className="text-sm">{name}</p>
-              <div className="flex items-center text-pink-500 text-xs">
+              <div className="flex items-center text-xs text-pink-500">
                 <HiFire className="mr-0.5" />
                 <p className="mr-0.5">{hot}</p>
                 <HiHeart className="mr-0.5" />

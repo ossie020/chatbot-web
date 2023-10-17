@@ -23,9 +23,9 @@ export function RestItems({ list }: Props) {
           )} rounded-lg w-full flex items-center justify-between hover:cursor-pointer`}
         >
           <div className="flex items-center">
-            <p className="text-sm text-pink-500 font-bold">#{rank}</p>
-            <img src={img} className="w-5 h-5 ml-3" />
-            <p className="text-xs ml-1">{name}</p>
+            <p className="text-sm font-bold text-pink-500">#{rank}</p>
+            <img src={img} className="ml-3 h-5 w-5" />
+            <p className="ml-1 text-xs">{name}</p>
           </div>
           <div className="flex items-center text-xs text-pink-500">
             <HiOutlineFire className="mr-0.5" />
