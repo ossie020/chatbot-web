@@ -8,7 +8,7 @@ export function CreateButton() {
 
   return (
     <Button
-      onClick={() => navigate('/create')}
+      onClick={() => navigate('/character')}
       className="h-16 w-full flex-center rounded-full border-none from-#E74694 to-#FFCD83 bg-gradient-to-r"
     >
       <img src={Magic} />
