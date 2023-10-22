@@ -1,14 +1,14 @@
 {
   "name": "chatbot",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build"
   },
   "dependencies": {
-    "@unocss/reset": "^0.56.5",
     "antd": "^5.10.1",
+    "hox": "^2.1.1",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -16,15 +16,15 @@
     "react-router-dom": "^6.16.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "1.0.0-beta.27",
     "@types/node": "^20.8.6",
     "@types/nprogress": "^0.2.1",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/parser": "^6.8.0",
     "@unocss/eslint-config": "^0.56.5",
+    "@unocss/reset": "^0.56.5",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "eslint": "^8.51.0",
-    "prettier": "^3.0.3",
     "typescript": "^5.0.2",
     "unocss": "^0.56.5",
     "vite": "^4.4.5"

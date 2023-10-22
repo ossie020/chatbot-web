@@ -1,7 +1,6 @@
-import Badge from '@/assets/svg/badge.svg'
-
-import { RestItems } from './RestItems'
-import { TopItems } from './TopItems'
+import { Header } from './Header'
+import { TopItem } from './TopItem'
+import { RestItem } from './RestItem'
 
 export function TopCharacters() {
   const topList = ['Moonlight', 'Stardust', 'LostLover'].map((name, i) => ({
@@ -27,14 +26,16 @@ export function TopCharacters() {
   }))
 
   return (
-    <div className="mt-4 w-342px border border-pink-400 rounded-xl p-6">
-      <div className="flex items-center">
-        <img src={Badge} className="h-8 w-8" />
-        <p className="ml-2 text-xl font-bold text-pink-500">Top Characters</p>
+    <div className="mt-4 w-full border border-pink-400 rounded-xl p-6">
+      <Header />
+
+      <div className="grid mt-4 gap-3">
+        {topList.map((item, i) => <TopItem key={`${i}`} {...item} />)}
       </div>
 
-      <TopItems list={topList} />
-      <RestItems list={restList} />
+      <div className="grid mt-4 gap-4 bg-gray-50 p-3">
+        {restList.map((item, i) => <RestItem key={`${i}`} {...item} />)}
+      </div>
     </div>
   )
 }

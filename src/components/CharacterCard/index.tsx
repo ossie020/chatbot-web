@@ -1,6 +1,6 @@
 import { HiOutlineFire, HiOutlineHeart } from 'react-icons/hi'
 
-type Props = {
+interface Props {
   user: {
     avatar: string
     name: string
@@ -12,13 +12,13 @@ type Props = {
   img: string
 }
 
-export function Card({ user, hot, fav, name, desc, img }: Props) {
+export function CharacterCard({ user, hot, fav, name, desc, img }: Props) {
   return (
     <div
       style={{ backgroundImage: `url(${img})` }}
-      className="h-335px flex flex-col justify-between rounded-xl bg-cover bg-center bg-no-repeat p-2 lg:w-310px md:w-380px xl:w-251px"
+      className="h-full w-full flex flex-col justify-between rounded-xl bg-cover bg-center bg-no-repeat p-2 lg:h-335px lg:w-310px sm:h-229px sm:w-172px xl:w-251px"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex-between">
         <div className="flex items-center text-pink-500">
           <div className="flex items-center rounded-full bg-white px-1">
             <HiOutlineFire className="h-3 w-3" />
