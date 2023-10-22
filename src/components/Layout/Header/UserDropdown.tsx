@@ -24,7 +24,7 @@ const items: MenuProps['items'] = [
     type: 'divider',
   },
   {
-    label: <DropdownItem icon={<HiLogout />} text="Sign Out" className="hover:text-red-500" />,
+    label: <DropdownItem icon={<HiLogout />} text="Sign Out" />,
     key: 'signout',
   },
 ]

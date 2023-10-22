@@ -9,7 +9,7 @@ export function RecentlyChatted() {
   }))
 
   return (
-    <div className="w-full border border-pink-400 rounded-xl p-6">
+    <div className="mt-4 w-full border border-pink-400 rounded-xl p-6">
       <Header />
       <div className="grid mt-4 gap-3">
         {list.map((item, i) => <Item key={`${i}`} {...item} />)}

@@ -13,6 +13,8 @@ function asyncRoute(RouteComponent: LazyExoticComponent<() => JSX.Element>) {
 }
 
 const Home = asyncRoute(lazy(() => import('./pages/home')))
+const Create = asyncRoute(lazy(() => import('./pages/create')))
+const Character = asyncRoute(lazy(() => import('./pages/character')))
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +23,18 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Home />,
+      },
+      {
+        path: '/create',
+        element: <Create />,
+      },
+      {
+        path: '/character/:id',
+        element: <Character />,
+      },
+      {
+        path: '*',
         element: <Home />,
       },
     ],
