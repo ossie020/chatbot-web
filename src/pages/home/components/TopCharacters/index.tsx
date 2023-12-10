@@ -1,40 +1,34 @@
+import { Character, listTopCharacter } from '@/api/character'
+import { useMount } from '@/hooks'
+import { useState } from 'react'
 import { Header } from './Header'
-import { TopItem } from './TopItem'
 import { RestItem } from './RestItem'
+import { TopItem } from './TopItem'
 
 export function TopCharacters() {
-  const topList = ['Moonlight', 'Stardust', 'LostLover'].map((name, i) => ({
-    name,
-    img: 'https://www.fate.ink/temp/avatar2.png',
-    rank: i + 1,
-    hot: 24774,
-    fav: 386,
-  }))
-  const restList = [
-    'StarBoy',
-    'BubblyNight',
-    'StarryLuxury',
-    'WanderingStars',
-    'StargazingWalk',
-    'MirageByTheSea',
-  ].map((name, i) => ({
-    name,
-    img: 'https://www.fate.ink/temp/avatar4.png',
-    rank: i + 1,
-    hot: 24774,
-    fav: 386,
-  }))
+  const [list, setList] = useState<Character[]>([])
+
+  useMount(() => fetchData())
+
+  async function fetchData() {
+    const _list = await listTopCharacter()
+    setList(_list)
+  }
 
   return (
-    <div className="mt-4 w-full border border-pink-400 rounded-xl p-6">
+    <div className="mt-4 w-full rounded-xl border border-pink-400 p-6">
       <Header />
 
-      <div className="grid mt-4 gap-3">
-        {topList.map((item, i) => <TopItem key={`${i}`} {...item} />)}
+      <div className="mt-4 grid gap-3">
+        {list.slice(0, 3).map((character, index) => (
+          <TopItem key={character.id} rank={index + 1} {...character} />
+        ))}
       </div>
 
-      <div className="grid mt-4 gap-4 bg-gray-50 p-3">
-        {restList.map((item, i) => <RestItem key={`${i}`} {...item} />)}
+      <div className="mt-4 grid gap-4 rounded-lg bg-gray-50 p-3 dark:bg-gray-700">
+        {list.slice(3).map((character, index) => (
+          <RestItem key={character.id} rank={index + 4} {...character} />
+        ))}
       </div>
     </div>
   )

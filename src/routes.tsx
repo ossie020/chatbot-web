@@ -1,8 +1,10 @@
 import { Suspense, lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import type { LazyExoticComponent } from 'react'
+
 import { Layout } from './components/Layout'
 import { PageLoading } from './components/PageLoading'
+
+import type { LazyExoticComponent } from 'react'
 
 function asyncRoute(RouteComponent: LazyExoticComponent<() => JSX.Element>) {
   return () => (
@@ -15,6 +17,7 @@ function asyncRoute(RouteComponent: LazyExoticComponent<() => JSX.Element>) {
 const Home = asyncRoute(lazy(() => import('./pages/home')))
 const Character = asyncRoute(lazy(() => import('./pages/character')))
 const Chat = asyncRoute(lazy(() => import('./pages/chat')))
+const Search = asyncRoute(lazy(() => import('./pages/search')))
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +37,7 @@ export const router = createBrowserRouter([
         element: <Character />,
       },
       {
-        path: '/chat/:id',
+        path: '/chat',
         element: <Chat />,
       },
       {
@@ -42,5 +45,9 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
     ],
+  },
+  {
+    path: '/search',
+    element: <Search />,
   },
 ])

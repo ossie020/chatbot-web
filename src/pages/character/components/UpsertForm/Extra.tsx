@@ -1,6 +1,9 @@
 const exampleDialogs = (
   <>
-    <p>Example chat between you and the character. This section is very important for teaching your character how they should speak.</p>
+    <p>
+      Example chat between you and the character. This section is very important for teaching your
+      character how they should speak.
+    </p>
     <p>Best practise example:</p>
     <p>#&#123;&#123;char&#125;&#125;: Hey, I'm Mark</p>
     <p>#&#123;&#123;user&#125;&#125;: hello Mark</p>

@@ -3,28 +3,34 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build"
   },
   "dependencies": {
-    "antd": "^5.10.2",
+    "antd": "^5.10.3",
+    "cropperjs": "^1.6.1",
+    "firebase": "^10.5.2",
     "hox": "^2.1.1",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
+    "react-cropper": "^2.3.3",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
-    "react-router-dom": "^6.17.0"
+    "react-markdown": "^9.0.0",
+    "react-router-dom": "^6.17.0",
+    "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "1.0.0-beta.27",
-    "@types/node": "^20.8.7",
+    "@types/node": "^20.8.9",
     "@types/nprogress": "^0.2.2",
-    "@types/react": "^18.2.31",
+    "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",
-    "@unocss/eslint-config": "^0.56.5",
+    "@types/react-syntax-highlighter": "^15.5.9",
     "@unocss/reset": "^0.56.5",
-    "@vitejs/plugin-react-swc": "^3.4.0",
-    "eslint": "^8.52.0",
+    "@vitejs/plugin-react-swc": "^3.4.1",
+    "prettier": "^3.1.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.5.7",
     "typescript": "^5.2.2",
     "unocss": "^0.56.5",
     "vite": "^4.5.0"

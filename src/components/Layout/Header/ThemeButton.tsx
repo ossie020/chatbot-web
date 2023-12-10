@@ -1,10 +1,20 @@
 import { Button } from 'antd'
-import { HiSun } from 'react-icons/hi'
+import { HiMoon, HiSun } from 'react-icons/hi'
+
+import { useAppStore } from '@/stores/app'
 
 export function ThemeButton() {
+  const { darkMode, toggleDark } = useAppStore()
+
   return (
-    <Button shape="circle" className="flex-center h-12 w-12 p-3">
-      <HiSun className="h-5 w-5" />
+    <Button
+      ghost
+      type="primary"
+      shape="circle"
+      className="flex-center !dark:border-gray-500 h-12 w-12 !border-gray-200 p-3 sm:hidden lg:flex"
+      onClick={toggleDark}
+    >
+      {darkMode ? <HiMoon className="h-6 w-6" /> : <HiSun className="h-6 w-6" />}
     </Button>
   )
 }

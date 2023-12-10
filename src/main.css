@@ -1,11 +1,45 @@
 @import 'nprogress/nprogress.css';
 @import '@unocss/reset/tailwind-compat.css';
+@import 'cropperjs/dist/cropper.css';
 
 #nprogress .bar {
-  background: #d61f69;
+  background: #e74694;
+}
+
+.cropper-modal,
+.cropper-drag-box,
+.cropper-point,
+.cropper-line {
+  background-color: unset;
+}
+
+.cropper-view-box {
+  outline: 2px dashed;
+  outline-color: #e74694;
 }
 
 .ant-form-item-extra {
   margin-top: 4px;
   font-size: 14px !important;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

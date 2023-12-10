@@ -1,22 +1,34 @@
-import { SearchInput } from './SearchInput'
-import { ThemeButton } from './ThemeButton'
-import { VersionButton } from './VersionButton'
-import { LoginButton } from './LoginButton'
-import { UserDropdown } from './UserDropdown'
-import { LoginModal } from './LoginModal'
+import { useNavigate } from 'react-router-dom'
+
 import { Logo } from '@/components/Logo'
 
-export function Header() {
-  return (
-    <div className="h-full flex-between border border-b-gray-200 bg-white px-4 py-3">
-      <Logo />
+import { LoginModal } from './LoginModal'
+import { SearchInput } from './SearchInput'
+import { ThemeButton } from './ThemeButton'
+import { UserDesktop } from './UserDesktop'
+import { UserMobile } from './UserMobile'
+import { VersionButton } from './VersionButton'
 
-      <div className="h-full flex items-center gap-x-3">
+export function Header() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="flex-between h-full border-b border-b-gray-200 bg-white px-4 py-3 dark:border-b-gray-500 dark:bg-gray-800">
+      <div className="hover:cursor-pointer sm:mr-6 lg:mr-4" onClick={() => navigate('/')}>
+        <Logo />
+      </div>
+
+      <div className="flex h-full items-center sm:gap-x-6 lg:gap-x-3">
         <SearchInput />
         <ThemeButton />
         <VersionButton />
-        <LoginButton />
-        <UserDropdown />
+
+        <div className="sm:hidden lg:inline">
+          <UserDesktop />
+        </div>
+        <div className="lg:hidden">
+          <UserMobile />
+        </div>
       </div>
 
       <LoginModal />

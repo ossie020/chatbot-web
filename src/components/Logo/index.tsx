@@ -1,3 +1,5 @@
+import LogoSVG from '@/assets/svg/logo.svg'
+
 export function Logo() {
-  return <div>logo</div>
+  return <img src={LogoSVG} />
 }
