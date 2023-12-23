@@ -14,7 +14,11 @@ export function ThemeButton() {
       className="flex-center !dark:border-gray-500 h-12 w-12 !border-gray-200 p-3 sm:hidden lg:flex"
       onClick={toggleDark}
     >
-      {darkMode ? <HiMoon className="h-6 w-6" /> : <HiSun className="h-6 w-6" />}
+      {darkMode ? (
+        <HiMoon className="h-6 w-6" />
+      ) : (
+        <HiSun className="h-6 w-6" />
+      )}
     </Button>
   )
 }

@@ -2,13 +2,14 @@ import { HiMenu, HiUserCircle } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppStore } from '@/stores/app'
+import { LoginModalState } from '@/utils/enums'
 
 export function UserMobile() {
   const navigate = useNavigate()
-  const { user, setOpen } = useAppStore()
+  const { user, setLoginModalState } = useAppStore()
 
   function open() {
-    setOpen(true)
+    setLoginModalState(LoginModalState.LOGIN)
   }
 
   function toUserPage() {

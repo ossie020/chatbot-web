@@ -1,6 +1,8 @@
+import { useState } from 'react'
+
 import { Character, listTopCharacter } from '@/api/character'
 import { useMount } from '@/hooks'
-import { useState } from 'react'
+
 import { Header } from './Header'
 import { RestItem } from './RestItem'
 import { TopItem } from './TopItem'

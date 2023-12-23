@@ -1,6 +1,7 @@
 import { Button, Switch } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi'
+import { useSearchParams } from 'react-router-dom'
 
 import {
   Character,
@@ -9,10 +10,13 @@ import {
   listCharacterByTag,
   listFavouriteCharacter,
   listMyCharacter,
-  listTag,
 } from '@/api/character'
+import { DataLoading } from '@/components/Lottie/DataLoading'
 import { useMount } from '@/hooks'
+import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
+import { KEYS } from '@/utils/constants'
+import { LoginModalState } from '@/utils/enums'
 
 import { CharacterCard } from './components/CharacterCard'
 import { CreateButton } from './components/CreateButton'
@@ -21,12 +25,13 @@ import { SiteInfo } from './components/SiteInfo'
 import { TopCharacters } from './components/TopCharacters'
 
 export default function Home() {
+  const [searchParams] = useSearchParams()
+  const { setLoginModalState, allTagsRef } = useAppStore()
   const { characterList, setCharacterList } = useCharacterStore()
 
   const characterListRef = useRef<Character[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
   const tagsRef = useRef<HTMLDivElement | null>(null)
-  const allTagsRef = useRef<Tag[]>([])
   const shortTagsRef = useRef<Tag[]>([])
   const pageRef = useRef(1)
   const totalRef = useRef(0)
@@ -34,6 +39,8 @@ export default function Home() {
   const [showAll, setShowAll] = useState(false)
   const [emptyMsg, setEmptyMsg] = useState('')
   const [tagType, setTagType] = useState('all')
+  const [end, setEnd] = useState(false)
+  const [total, setTotal] = useState(-1)
 
   let wrapIndex = 0
   const moreTag = wrapIndex < allTagsRef.current.length
@@ -42,6 +49,13 @@ export default function Home() {
 
   useMount(() => {
     fetchData()
+
+    if (
+      searchParams.get('message_type') === 'stripe_callback' &&
+      !!searchParams.get('message')
+    ) {
+      setLoginModalState(LoginModalState.CHECKOUT)
+    }
   })
 
   useEffect(() => {
@@ -60,13 +74,10 @@ export default function Home() {
   }, [characterList])
 
   async function fetchData() {
-    const [{ data: _characterList, total }, _tagList] = await Promise.all([
-      listCharacter(),
-      listTag(),
-    ])
-    setCharacterList(_characterList)
-    allTagsRef.current = _tagList
+    const { data, total } = await listCharacter()
+    setCharacterList(data)
     totalRef.current = total
+    setTotal(total)
 
     setTimeout(() => {
       const { clientWidth: containerWidth } = containerRef.current!
@@ -158,6 +169,7 @@ export default function Home() {
     }
 
     if (characterListRef.current.length === totalRef.current) {
+      setEnd(true)
       return
     }
 
@@ -186,8 +198,11 @@ export default function Home() {
         <TopCharacters />
         <SiteInfo />
       </div>
-      <div className="lg-min-w-636px relative mb-4">
-        <div ref={containerRef} className="top-18 sticky flex bg-white dark:bg-gray-800">
+      <div className="lg-min-w-636px relative mb-4 w-full">
+        <div
+          ref={containerRef}
+          className="top-18 sticky z-20 flex bg-white dark:bg-gray-800"
+        >
           <div ref={tagsRef} className="flex w-0 flex-1 flex-wrap gap-2 py-4">
             <Button
               onClick={() => fetchCharacterList('all')}
@@ -237,7 +252,12 @@ export default function Home() {
           </div>
           <div className="pt-20px ml-3 flex gap-x-2">
             <span>NSFW</span>
-            <Switch />
+            <Switch
+              defaultChecked
+              onChange={(value) =>
+                localStorage.setItem(KEYS.NSFW, value.toString())
+              }
+            />
           </div>
         </div>
 
@@ -252,6 +272,8 @@ export default function Home() {
             {emptyMsg}
           </div>
         )}
+
+        {characterList.length !== total && <DataLoading />}
       </div>
     </div>
   )

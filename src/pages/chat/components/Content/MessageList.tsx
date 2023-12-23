@@ -7,18 +7,29 @@ import { MessageBox } from './MessageBox'
 export function MessageList() {
   const { messages } = useChatStore()
 
-  const bottomRef = useRef<null | HTMLDivElement>(null)
+  const listRef = useRef<null | HTMLDivElement>(null)
 
   useEffect(() => {
-    if (bottomRef.current && bottomRef.current.clientHeight) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    if (listRef.current && listRef.current.clientHeight) {
+      listRef.current.scrollIntoView({
+        // behavior: 'smooth',
+        block: 'end',
+      })
     }
   }, [messages])
 
   return (
-    <div ref={bottomRef} className="py-36px grid gap-4">
-      {messages.map((item) => (
-        <MessageBox key={item.timestamp} {...item} />
+    <div ref={listRef} className="py-16px grid gap-4">
+      {messages.map((item, index) => (
+        <MessageBox
+          key={item.id}
+          {...item}
+          isLastChatbot={
+            index === messages.length - 1 &&
+            item.type === 'chatbot' &&
+            messages.length > 1
+          }
+        />
       ))}
     </div>
   )

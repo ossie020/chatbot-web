@@ -1,4 +1,5 @@
 import { Button, Dropdown, Space } from 'antd'
+import type { MenuProps } from 'antd'
 import { useState } from 'react'
 import { HiChevronDown, HiLogout, HiUserCircle } from 'react-icons/hi'
 
@@ -7,8 +8,6 @@ import { useAppStore } from '@/stores/app'
 import { AccountModal } from './AccountModal'
 import { DropdownItem } from './DropdownItem'
 import { SignoutModal } from './SignoutModal'
-
-import type { MenuProps } from 'antd'
 
 export function UserDropdown() {
   const { signOut, user } = useAppStore()
@@ -36,7 +35,11 @@ export function UserDropdown() {
       <Dropdown menu={{ items }}>
         <Button ghost type="primary" shape="round" className="h-12">
           <Space>
-            <p className="text-16px font-bold">{user.nickname}</p>
+            <p className="text-16px font-bold">
+              {user.nickname && user.nickname.length <= 10
+                ? user.nickname
+                : `${user.nickname?.substring(0, 10)}...`}
+            </p>
             <HiChevronDown className="h-6 w-6" />
           </Space>
         </Button>

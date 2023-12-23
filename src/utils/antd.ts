@@ -1,5 +1,4 @@
 import { theme as defaultTheme } from 'antd'
-
 import type { ThemeConfig } from 'antd'
 
 export const theme: ThemeConfig = {

@@ -15,7 +15,12 @@ export function SignoutModal({ open, onCancle, onConfirm }: Props) {
           <Button size="large" onClick={onCancle}>
             Cancel
           </Button>
-          <Button type="primary" size="large" className="ml-3" onClick={onConfirm}>
+          <Button
+            type="primary"
+            size="large"
+            className="ml-3"
+            onClick={onConfirm}
+          >
             Confirm
           </Button>
         </div>

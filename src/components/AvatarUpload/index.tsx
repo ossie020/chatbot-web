@@ -13,7 +13,12 @@ export type Props = {
   height?: string
 }
 
-export function AvatarUpload({ avatar, setAvatar, width = '120px', height = '160px' }: Props) {
+export function AvatarUpload({
+  avatar,
+  setAvatar,
+  width = '120px',
+  height = '160px',
+}: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
@@ -30,6 +35,11 @@ export function AvatarUpload({ avatar, setAvatar, width = '120px', height = '160
 
     if (!file.type.includes('image')) {
       message.error('Please upload image file')
+      return
+    }
+
+    if (file.size > 1024 * 1024 * 3) {
+      message.error('File size can not exceed 3MB')
       return
     }
 
@@ -75,7 +85,12 @@ export function AvatarUpload({ avatar, setAvatar, width = '120px', height = '160
 
   return (
     <>
-      <input ref={fileRef} type="file" onChange={handleFileChange} className="hidden!" />
+      <input
+        ref={fileRef}
+        type="file"
+        onChange={handleFileChange}
+        className="hidden!"
+      />
       <div
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
@@ -84,7 +99,10 @@ export function AvatarUpload({ avatar, setAvatar, width = '120px', height = '160
       >
         {avatar ? (
           <>
-            <img src={cropperImage} className="absolute bottom-0 left-0 right-0 top-0 h-full" />
+            <img
+              src={cropperImage}
+              className="absolute bottom-0 left-0 right-0 top-0 h-full"
+            />
             {hover && (
               <>
                 <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-black/60"></div>

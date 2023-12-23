@@ -13,9 +13,10 @@ type Props = {
 }
 
 const { Item: FormItem, useForm } = Form
+const { TextArea } = Input
 
 export function AccountModal({ open, close }: Props) {
-  const { user } = useAppStore()
+  const { user, setUser } = useAppStore()
   const [form] = useForm()
 
   const [avatar, setAvatar] = useState('')
@@ -42,6 +43,15 @@ export function AccountModal({ open, close }: Props) {
     try {
       await updateUser(data)
       message.success('success')
+      close()
+
+      if (data.nickname !== user.nickname) {
+        setUser({ ...user, nickname: data.nickname })
+      }
+
+      if (data.avatar !== user.avatar) {
+        setUser({ ...user, avatar: data.avatar })
+      }
     } finally {
       setLoading(false)
     }
@@ -60,11 +70,15 @@ export function AccountModal({ open, close }: Props) {
           </FormItem>
 
           <FormItem label="Your Avatar">
-            <AvatarUpload avatar={avatar} setAvatar={setAvatar} height="120px" />
+            <AvatarUpload
+              avatar={avatar}
+              setAvatar={setAvatar}
+              height="120px"
+            />
           </FormItem>
 
           <FormItem label="Bio">
-            <Input />
+            <TextArea rows={3} />
           </FormItem>
 
           <Button

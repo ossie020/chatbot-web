@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { Character } from '@/api/character'
 import Star from '@/assets/svg/star.svg'
+import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
+import { LoginModalState } from '@/utils/enums'
 
 type Props = Character & {
   rank: number
@@ -23,14 +25,20 @@ function bgRank(rank: number) {
 }
 
 export function TopItem(character: Props) {
-  const { avatar, name, talks_count, likes_count, rank } = character
+  const { user, setLoginModalState } = useAppStore()
+  const { id, avatar, name, talks_count, likes_count, rank } = character
 
   const navigate = useNavigate()
   const { setCharacter } = useCharacterStore()
 
   function toChat() {
+    if (!user.uid) {
+      setLoginModalState(LoginModalState.LOGIN)
+      return
+    }
+
     setCharacter(character)
-    navigate(`/chat`)
+    navigate(`/character/${id}/chat`)
   }
 
   return (
@@ -39,7 +47,7 @@ export function TopItem(character: Props) {
       style={{ background: bgRank(rank) }}
       className="flex w-full items-center rounded-lg pr-3 hover:cursor-pointer"
     >
-      <img src={avatar} className="h-14 w-14 rounded" />
+      <img src={avatar} className="h-14 w-14 rounded object-cover" />
       <div className="flex-between ml-2.5 h-14 flex-1">
         <div className="flex-1">
           <p className="text-sm">{name}</p>

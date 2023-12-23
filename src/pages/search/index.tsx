@@ -1,9 +1,9 @@
-import { Character, searchCharacter } from '@/api/character'
 import { ConfigProvider, Input } from 'antd'
 import { useState } from 'react'
 import { HiChevronLeft, HiSearch } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
+import { Character, searchCharacter } from '@/api/character'
 import { useAppStore } from '@/stores/app'
 import { darkTheme, theme } from '@/utils/antd'
 

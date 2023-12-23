@@ -1,11 +1,11 @@
 import { Button, Form, Input, Radio, Select, message } from 'antd'
 import { useState } from 'react'
-import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 import { createCharacter } from '@/api/character'
 import Magic from '@/assets/svg/magic.svg'
 import { AvatarUpload } from '@/components/AvatarUpload'
+import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
 
 import { extras } from './Extra'
@@ -17,11 +17,11 @@ const { TextArea } = Input
 
 export function UpsertForm() {
   const navigate = useNavigate()
+  const { allTagList } = useAppStore()
   const { mode } = useCharacterStore()
 
   const [form] = useForm()
   const [avatar, setAvatar] = useState('')
-  const [expand, setExpand] = useState(false)
 
   async function submit() {
     try {
@@ -29,6 +29,11 @@ export function UpsertForm() {
 
       if (!avatar) {
         message.error('Please upload avatar')
+        throw new Error()
+      }
+
+      if (data.tags.length > 7) {
+        message.error('Maximum 7 tags only')
         throw new Error()
       }
 
@@ -54,7 +59,10 @@ export function UpsertForm() {
         <FormItem
           label="Name"
           name="name"
-          rules={[{ required: true, message: 'Please input name' }]}
+          rules={[
+            { required: true, message: 'Please input name' },
+            { max: 20, message: 'Name should be at most 20 characters' },
+          ]}
           extra={extras.userName}
         >
           <Input size="large" />
@@ -70,19 +78,29 @@ export function UpsertForm() {
           rules={[{ required: true, message: 'Please select visibility' }]}
           extra={extras.visibility}
         >
-          <Select size="large">
-            <Option value="public">Public</Option>
-            <Option value="private">Private</Option>
+          <Select size="large" defaultValue="public">
+            <Option value="public">Public - Anyone can chat</Option>
+            <Option value="private">Private - Only you can chat</Option>
           </Select>
         </FormItem>
 
         <FormItem
           label="Introduction"
           name="introduction"
-          rules={[{ required: true, message: 'Please input introduction' }]}
+          rules={[
+            { required: true, message: 'Please input introduction' },
+            {
+              max: 500,
+              message: 'Introduction should be at most 500 characters',
+            },
+          ]}
           extra={extras.introduction}
         >
-          <Input size="large" />
+          <TextArea
+            rows={3}
+            placeholder="e.g. I am very adept at emotional disputes.
+"
+          />
         </FormItem>
 
         <FormItem
@@ -93,8 +111,8 @@ export function UpsertForm() {
           <RadioGroup
             optionType="button"
             options={[
-              { label: 'Limited', value: 'limited' },
-              { label: 'NSFW', value: 'nsfw' },
+              { label: '👪 SFW', value: 'limited' },
+              { label: '🔞 NSFW', value: 'nsfw' },
             ]}
           />
         </FormItem>
@@ -105,38 +123,85 @@ export function UpsertForm() {
           rules={[{ required: true, message: 'Please select tags' }]}
           extra={extras.tags}
         >
-          <Select size="large" mode="tags" />
+          <Select
+            size="large"
+            mode="multiple"
+            options={allTagList.map(({ name, emoji, description }) => ({
+              label: `${emoji} ${name}`,
+              value: name,
+              description,
+            }))}
+            optionLabelProp="label"
+            optionRender={(option) =>
+              `${option.data.label} (${option.data.description})`
+            }
+          />
         </FormItem>
 
-        <div
-          onClick={() => setExpand(!expand)}
-          className="font-500 my-4 flex items-center text-pink-500 hover:cursor-pointer"
+        <FormItem
+          label="Greeting"
+          name="greeting"
+          rules={[
+            { required: true, message: 'Please input greeting' },
+            { max: 500, message: 'Greeting should be at most 500 characters' },
+          ]}
+          extra={extras.greeting}
         >
-          <span className="mr-1">Advanced setting</span>
-          {expand ? <HiChevronDown className="h-4 w-4" /> : <HiChevronUp className="h-4 w-4" />}
-        </div>
+          <TextArea
+            rows={3}
+            placeholder="e.g. Hello,  is there anything you want to ask me?"
+          />
+        </FormItem>
 
-        {!expand && (
-          <>
-            <FormItem label="Greeting" name="greeting" extra={extras.greeting}>
-              <Input size="large" />
-            </FormItem>
+        <FormItem
+          label="Personality"
+          name="personality"
+          rules={[
+            { required: true, message: 'Please input personality' },
+            {
+              max: 1000,
+              message: 'Personality should be at most 1000 characters',
+            },
+          ]}
+          extra={extras.personality}
+        >
+          <TextArea
+            rows={5}
+            placeholder="You can write about the character's experiences, personality, behavior habits, preferences, etc. here."
+          />
+        </FormItem>
 
-            <FormItem label="Personality" name="personality" extra={extras.personality}>
-              <Input size="large" />
-            </FormItem>
+        <FormItem label="Scenario" name="scenario" extra={extras.scenario}>
+          <TextArea
+            rows={5}
+            placeholder="You can fill in the background, scenario, and scene settings of the dialogue."
+          />
+        </FormItem>
 
-            <FormItem label="Chat background" name="chat_background" extra={extras.chatBackground}>
-              <Input size="large" />
-            </FormItem>
+        <FormItem
+          label="Example dialogs"
+          name="example_dialogs"
+          extra={extras.exampleDialogs}
+        >
+          <TextArea
+            rows={5}
+            placeholder={`- “${String.fromCharCode(
+              10,
+            )}{{char}}: Hey, I'm Mark${String.fromCharCode(
+              10,
+            )}{{user}}: hello Mark${String.fromCharCode(
+              10,
+            )}{{char}}: nice to meet you :)${String.fromCharCode(10)}”`}
+          />
+        </FormItem>
 
-            <FormItem label="Example dialogs" name="example_dialogs" extra={extras.exampleDialogs}>
-              <TextArea autoSize />
-            </FormItem>
-          </>
-        )}
-
-        <Button type="primary" size="large" className="flex-center" block onClick={submit}>
+        <Button
+          type="primary"
+          size="large"
+          className="flex-center"
+          block
+          onClick={submit}
+        >
           <img src={Magic} className="h-5 w-5" />
           <p className="font-500 ml-2">{mode}</p>
         </Button>

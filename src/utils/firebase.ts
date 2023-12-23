@@ -1,5 +1,17 @@
 import { initializeApp } from 'firebase/app'
-import { GoogleAuthProvider, OAuthProvider, getAuth } from 'firebase/auth'
+import {
+  AuthErrorCodes,
+  GoogleAuthProvider,
+  OAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  getIdToken,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAHOdlvYZ1F6SeBetlKIuzWGTEj1QunmVY',
@@ -12,7 +24,67 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
+const auth = getAuth(app)
 
-export const googleProvider = new GoogleAuthProvider()
-export const appleProvider = new OAuthProvider('apple.com')
+const googleProvider = new GoogleAuthProvider()
+const appleProvider = new OAuthProvider('apple.com')
+
+export async function signInByGoogle() {
+  try {
+    const { user } = await signInWithPopup(auth, googleProvider)
+    const idToken = await getIdToken(user)
+    return idToken
+  } catch (error: any) {
+    throw new Error(error.message)
+  }
+}
+
+export async function signInByApple() {
+  try {
+    const { user } = await signInWithPopup(auth, appleProvider)
+    const idToken = await getIdToken(user)
+    return idToken
+  } catch (error: any) {
+    throw new Error(error.message)
+  }
+}
+
+async function singInByEmail(email: string, password: string) {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password)
+    const idToken = await getIdToken(user)
+    return idToken
+  } catch (error: any) {
+    if (error.code === AuthErrorCodes.INVALID_LOGIN_CREDENTIALS) {
+      throw new Error('invalid username or password')
+    } else {
+      throw new Error(error.message)
+    }
+  }
+}
+
+async function register(email: string, password: string) {
+  const { user } = await createUserWithEmailAndPassword(auth, email, password)
+  await sendEmailVerification(user)
+  return ''
+}
+
+export async function registerOrSignIn(email: string, password: string) {
+  try {
+    return await register(email, password)
+  } catch (error: any) {
+    if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
+      return await singInByEmail(email, password)
+    } else {
+      throw new Error(error.message)
+    }
+  }
+}
+
+export async function exit() {
+  return await signOut(auth)
+}
+
+export async function sendResetEmail(email: string) {
+  await sendPasswordResetEmail(auth, email)
+}

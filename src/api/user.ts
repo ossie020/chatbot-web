@@ -34,3 +34,25 @@ export async function upload(file: File) {
 
   return await postForm<{ url: string }>('/user/upload/', formData)
 }
+
+export interface Plan {
+  plan_id: number
+  plan_type: string
+  price: string
+  currency: string
+}
+
+export interface UserPlan extends Plan {
+  amount: number
+  expired: boolean
+  start_time: string
+  end_time: string
+}
+
+export async function getUserPlan() {
+  return get<UserPlan>('/user/plan/')
+}
+
+export async function listPlan() {
+  return get<Plan[]>('/user/plan_list/')
+}

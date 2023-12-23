@@ -11,13 +11,17 @@ export function initDarkMode() {
     current = window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
-  current ? htmlElement.setAttribute('class', 'dark') : htmlElement.removeAttribute('class')
+  current
+    ? htmlElement.setAttribute('class', 'dark')
+    : htmlElement.removeAttribute('class')
   return current
 }
 
 export function toggleDarkMode(current: boolean) {
   const htmlElement = document.documentElement
-  current ? htmlElement.removeAttribute('class') : htmlElement.setAttribute('class', 'dark')
+  current
+    ? htmlElement.removeAttribute('class')
+    : htmlElement.setAttribute('class', 'dark')
   localStorage.setItem(KEYS.DARK, (!current).toString())
 }
 
@@ -35,4 +39,8 @@ export function dataURLtoBlob(dataURL: string, fileName: string) {
   const blob = new Blob([uInt8Array], { type: contentType })
   const file = new File([blob], fileName, { type: blob.type })
   return file
+}
+
+export function calcDays(start: number, end: number) {
+  return Math.ceil(Math.abs(end - start) / (3600 * 24 * 1000))
 }
