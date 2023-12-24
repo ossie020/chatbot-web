@@ -45,8 +45,8 @@ export function AccountModal({ open, close }: Props) {
       message.success('success')
       close()
 
-      if (data.nickname !== user.nickname) {
-        setUser({ ...user, nickname: data.nickname })
+      if (data.user_name !== user.user_name) {
+        setUser({ ...user, user_name: data.user_name })
       }
 
       if (data.avatar !== user.avatar) {
@@ -62,9 +62,9 @@ export function AccountModal({ open, close }: Props) {
       <div className="my-2">
         <Form form={form} layout="vertical">
           <FormItem
-            label="Nick name"
-            name="nickname"
-            rules={[{ required: true, message: 'Please input nick name' }]}
+            label="User name"
+            name="user_name"
+            rules={[{ required: true, message: 'Please input user name' }]}
           >
             <Input />
           </FormItem>

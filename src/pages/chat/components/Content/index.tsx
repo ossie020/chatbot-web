@@ -29,7 +29,7 @@ export function Content() {
         background:
           'linear-gradient(0deg, #D3DAED 0%, #D3DAED 100%), rgba(0, 0, 0, 0.20)',
       }}
-      className="overflow-auto px-16px flex h-full w-full flex-col overflow-auto rounded-bl-xl rounded-br-xl"
+      className="overflow-auto px-16px flex h-full w-full flex-col overflow-auto rounded-xl"
     >
       <div ref={contentRef} className="h-full min-h-0 w-full flex-1">
         <div className="py-7px px-16px rounded-8px mt-24px bg-#E0E5F2 flex text-gray-400">

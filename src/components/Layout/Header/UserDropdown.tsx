@@ -36,9 +36,9 @@ export function UserDropdown() {
         <Button ghost type="primary" shape="round" className="h-12">
           <Space>
             <p className="text-16px font-bold">
-              {user.nickname && user.nickname.length <= 10
-                ? user.nickname
-                : `${user.nickname?.substring(0, 10)}...`}
+              {user.user_name && user.user_name.length <= 10
+                ? user.user_name
+                : `${user.user_name?.toString().substring(0, 8)}...`}
             </p>
             <HiChevronDown className="h-6 w-6" />
           </Space>

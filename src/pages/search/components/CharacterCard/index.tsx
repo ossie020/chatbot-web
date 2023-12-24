@@ -46,7 +46,7 @@ export function CharacterCard(character: Character) {
           </div>
           <div className="flex items-center">
             <img src={user?.avatar} className="h-4 w-4 rounded-full" />
-            <p className="text-10px ml-1 font-medium">{user?.nickname}</p>
+            <p className="text-10px ml-1 font-medium">{user?.user_name}</p>
           </div>
         </div>
       </div>

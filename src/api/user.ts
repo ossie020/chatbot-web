@@ -4,7 +4,7 @@ export interface User {
   uid: string
   id: string
   email: string
-  nickname: string
+  user_name: string
   avatar: string
 }
 
