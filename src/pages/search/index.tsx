@@ -8,6 +8,7 @@ import { useAppStore } from '@/stores/app'
 import { darkTheme, theme } from '@/utils/antd'
 
 import { CharacterCard } from './components/CharacterCard'
+import { DataLoading } from '@/components/Lottie/DataLoading'
 
 export default function Search() {
   const navigate = useNavigate()
@@ -15,14 +16,17 @@ export default function Search() {
 
   const [characterList, setCharacterList] = useState<Character[]>([])
   const [keyword, setKeyword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   async function search() {
     if (!keyword) {
       setCharacterList([])
     }
 
+    setLoading(true)
     const { introduction, name, tag } = await searchCharacter(keyword)
     setCharacterList([...introduction, ...name, ...tag])
+    setLoading(false)
   }
 
   return (
@@ -42,8 +46,8 @@ export default function Search() {
         />
       </div>
 
-      <div className="lg:w-1024px md:w-768px sm:w-390px xl:w-1440px flex-center mx-auto mt-24 grid gap-3">
-        {characterList.map((character) => (
+      <div className="lg:w-1024px md:w-768px sm:w-390px xl:w-1440px flex-center mx-auto mt-24 mb-6 grid gap-3">
+        {loading ? <DataLoading/> : characterList.map((character) => (
           <CharacterCard key={character.id} {...character} />
         ))}
       </div>

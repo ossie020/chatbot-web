@@ -1,18 +1,16 @@
 import { HiOutlineFire, HiOutlineHeart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
-import type { Character } from '@/api/character'
-import { useCharacterStore } from '@/stores/character'
+import { getChatKey, type Character } from '@/api/character'
 
 export function CharacterCard(character: Character) {
   const { id, avatar, name, likes_count, talks_count, introduction, user } =
     character
   const navigate = useNavigate()
-  const { setCharacter } = useCharacterStore()
 
-  function toChat() {
-    setCharacter(character)
-    navigate(`/character/${id}/chat`)
+  async function toChat() {
+    const { chat_key = '' } = await getChatKey(id)
+    navigate(`/character/${id}/chat/${chat_key}`)
   }
 
   return (
