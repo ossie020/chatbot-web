@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { type Character, getChatKey } from '@/api/character'
 import { useAppStore } from '@/stores/app'
 import { LoginModalState } from '@/utils/enums'
+import { createChatKey } from '@/api/chat'
 
 export function CharacterCard(character: Character) {
   const { user: authedUser, setLoginModalState } = useAppStore()
@@ -17,8 +18,11 @@ export function CharacterCard(character: Character) {
       return
     }
 
-    const { chat_key = '' } = await getChatKey(id)
-    navigate(`/character/${id}/chat/${chat_key}`)
+    let result = await getChatKey(id)
+    if (!result.chat_key) {
+      result = await createChatKey(id)
+    }
+    navigate(`/character/${id}/chat/${result.chat_key}`)
   }
 
   return (
@@ -59,7 +63,7 @@ export function CharacterCard(character: Character) {
         <p className="text-xl font-bold text-white">{name}</p>
         <div className="min-h-61px text-13px rounded-bl-20px rounded-br-20px rounded-tr-20px max-h-248px backdrop-blur-12px mt-2 flex items-center border border-pink-500 bg-black/10 px-3 py-2 font-medium text-white">
           <span className="hover:line-clamp-12 line-clamp-2">
-            {introduction.replace(/\\n/g, '&#10;')}
+            {introduction?.replace(/\\n/g, '&#10;')}
           </span>
         </div>
       </div>

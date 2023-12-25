@@ -1,10 +1,10 @@
 import { HiOutlineFire, HiOutlineHeart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
-import { Character } from '@/api/character'
+import { Character, getChatKey } from '@/api/character'
 import { useAppStore } from '@/stores/app'
-import { useCharacterStore } from '@/stores/character'
 import { LoginModalState } from '@/utils/enums'
+import { createChatKey } from '@/api/chat'
 
 type Props = Character & {
   rank: number
@@ -15,16 +15,18 @@ export function RestItem(character: Props) {
   const { id, avatar, name, talks_count, likes_count, rank } = character
 
   const navigate = useNavigate()
-  const { setCharacter } = useCharacterStore()
 
-  function toChat() {
+  async function toChat() {
     if (!user.uid) {
       setLoginModalState(LoginModalState.LOGIN)
       return
     }
 
-    setCharacter(character)
-    navigate(`/character/${id}/chat`)
+    let result = await getChatKey(id)
+    if (!result.chat_key) {
+      result = await createChatKey(id)
+    }
+    navigate(`/character/${id}/chat/${result.chat_key}`)
   }
 
   return (

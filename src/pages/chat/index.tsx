@@ -21,12 +21,7 @@ export default function Chat() {
   useMount(init)
 
   async function init() {
-    if (!chat_key) {
-      const result = await createChatKey(id!)
-      chatKeyRef.current = result.chat_key
-    } else {
-      chatKeyRef.current = chat_key
-    }
+    chatKeyRef.current = chat_key!
 
     const character = await getCharacter(id!)
     setCharacter(character)
