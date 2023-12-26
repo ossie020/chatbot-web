@@ -121,15 +121,16 @@ export function AvatarUpload({
           <Cropper
             ref={cropperRef}
             zoomTo={0.5}
-            initialAspectRatio={1}
+            initialAspectRatio={0.75}
+            aspectRatio={0.75}
             preview=".img-preview"
             src={image}
             viewMode={1}
-            minCropBoxHeight={10}
-            minCropBoxWidth={10}
+            minCropBoxHeight={16}
+            minCropBoxWidth={12}
             background={false}
             responsive={true}
-            autoCropArea={1}
+            autoCropArea={1.2}
             checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
             guides={true}
             style={{ height: '400px' }}
