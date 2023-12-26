@@ -31,7 +31,7 @@ export function MessageBox({ type, message, isLastChatbot }: Props) {
       <div className="gap-x-10px flex">
         <img
           src={character.avatar}
-          className="h-64px w-64px min-w-64px rounded-full object-cover"
+          className="h-32px w-64px min-w-64px rounded-full object-cover"
         />
         <div className="px-16px py-9px rounded-bl-3xl rounded-br-3xl backdrop-blur-md text-white bg-black/20 rounded-tr-3xl">
           <ChatLoading />

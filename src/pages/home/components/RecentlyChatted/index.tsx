@@ -52,7 +52,7 @@ export function RecentlyChatted() {
   return (
     <div className="mt-4 w-full rounded-xl border border-pink-400 p-6">
       <Header />
-      <div className="h-240px no-scrollbar mt-4 grid gap-3 overflow-auto">
+      <div className="h-240px no-scrollbar mt-4 flex flex-col gap-3 overflow-auto">
         {user.uid
           ? list.length
             ? renderList()

@@ -20,7 +20,7 @@ export function Item({
   return (
     <div
       onClick={toChat}
-      className="flex w-full items-center rounded-lg hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+      className="flex w-full max-h-48px items-center rounded-lg hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
     >
       <img src={avatar} className="h-12 w-12 rounded-full object-cover" />
       <div className="ml-2.5 flex-1">
