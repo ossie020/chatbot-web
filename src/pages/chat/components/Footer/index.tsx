@@ -13,6 +13,10 @@ export function Footer() {
       return
     }
 
+    if (loading) {
+      return
+    }
+
     send(message)
     setMessage('')
   }
@@ -23,6 +27,10 @@ export function Footer() {
     }
 
     if (message.trim() === '') {
+      return
+    }
+
+    if (loading) {
       return
     }
 
@@ -38,7 +46,6 @@ export function Footer() {
         onPressEnter={handleKeydown}
         placeholder="Type your message"
         className="h-9 rounded-full"
-        disabled={loading}
       />
       {loading ? (
         <HiArrowCircleUp className="ml-3 h-11 w-11 text-#E0E5F2" />

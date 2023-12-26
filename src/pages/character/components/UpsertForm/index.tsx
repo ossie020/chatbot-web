@@ -1,5 +1,5 @@
 import { Button, Form, Input, Radio, Select, message } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { createCharacter } from '@/api/character'
@@ -22,6 +22,10 @@ export function UpsertForm() {
 
   const [form] = useForm()
   const [avatar, setAvatar] = useState('')
+
+  useEffect(() => {
+    form.setFieldsValue({ visibility: 'public' })
+  }, [])
 
   async function submit() {
     try {
@@ -90,8 +94,8 @@ export function UpsertForm() {
           rules={[
             { required: true, message: 'Please input introduction' },
             {
-              max: 500,
-              message: 'Introduction should be at most 500 characters',
+              max: 4000,
+              message: 'Introduction should be at most 4000 characters',
             },
           ]}
           extra={extras.introduction}
@@ -143,7 +147,10 @@ export function UpsertForm() {
           name="greeting"
           rules={[
             { required: true, message: 'Please input greeting' },
-            { max: 500, message: 'Greeting should be at most 500 characters' },
+            {
+              max: 5000,
+              message: 'Greeting should be at most 5000 characters',
+            },
           ]}
           extra={extras.greeting}
         >
@@ -159,8 +166,8 @@ export function UpsertForm() {
           rules={[
             { required: true, message: 'Please input personality' },
             {
-              max: 1000,
-              message: 'Personality should be at most 1000 characters',
+              max: 15000,
+              message: 'Personality should be at most 15000 characters',
             },
           ]}
           extra={extras.personality}
@@ -171,7 +178,17 @@ export function UpsertForm() {
           />
         </FormItem>
 
-        <FormItem label="Scenario" name="scenario" extra={extras.scenario}>
+        <FormItem
+          label="Scenario"
+          name="scenario"
+          rules={[
+            {
+              max: 7000,
+              message: 'Scenario should be at most 7000 characters',
+            },
+          ]}
+          extra={extras.scenario}
+        >
           <TextArea
             rows={5}
             placeholder="You can fill in the background, scenario, and scene settings of the dialogue."
@@ -181,6 +198,12 @@ export function UpsertForm() {
         <FormItem
           label="Example dialogs"
           name="example_dialogs"
+          rules={[
+            {
+              max: 15000,
+              message: 'Example dialogs should be at most 7000 characters',
+            },
+          ]}
           extra={extras.exampleDialogs}
         >
           <TextArea

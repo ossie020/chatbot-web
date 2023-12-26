@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
 import { getCharacter } from '@/api/character'
-import { createChatKey, listChatHistory } from '@/api/chat'
+import { listChatHistory } from '@/api/chat'
 import { PlanModal } from '@/components/Layout/Header/PlanModal'
 import { useMount } from '@/hooks'
 import { useAppStore } from '@/stores/app'
