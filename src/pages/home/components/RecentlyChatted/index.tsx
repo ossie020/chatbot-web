@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { useLifecycles } from 'react-use'
 
 import { ChattedCharacter, listRecentCharacter } from '@/api/character'
-import { useMount } from '@/hooks'
 import { useAppStore } from '@/stores/app'
 import { LoginModalState } from '@/utils/enums'
 
@@ -13,7 +13,7 @@ export function RecentlyChatted() {
 
   const [list, setList] = useState<ChattedCharacter[]>([])
 
-  useMount(() => fetchData())
+  useLifecycles(() => fetchData())
 
   async function fetchData() {
     const _list = await listRecentCharacter()

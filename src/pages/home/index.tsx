@@ -2,6 +2,7 @@ import { Button, Switch } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi'
 import { useSearchParams } from 'react-router-dom'
+import { useLifecycles } from 'react-use'
 
 import {
   Character,
@@ -12,7 +13,6 @@ import {
   listMyCharacter,
 } from '@/api/character'
 import { DataLoading } from '@/components/Lottie/DataLoading'
-import { useMount } from '@/hooks'
 import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
 import { KEYS } from '@/utils/constants'
@@ -35,10 +35,11 @@ export default function Home() {
   const shortTagsRef = useRef<Tag[]>([])
   const pageRef = useRef(1)
   const totalRef = useRef(0)
+  const tagTypeRef = useRef('all')
+  const [tagType, setTagType] = useState('all')
   const [tagList, setTagList] = useState<Tag[]>([])
   const [showAll, setShowAll] = useState(false)
   const [emptyMsg, setEmptyMsg] = useState('')
-  const [tagType, setTagType] = useState('all')
   const [end, setEnd] = useState(false)
   const [total, setTotal] = useState(-1)
 
@@ -47,37 +48,10 @@ export default function Home() {
   let buttons: HTMLDivElement | null = null
   const root = document.getElementById('root')!
 
-  useMount(() => {
+  useLifecycles(init, exit)
+
+  function init() {
     fetchData()
-
-    if (
-      searchParams.get('message_type') === 'stripe_callback' &&
-      !!searchParams.get('message')
-    ) {
-      setLoginModalState(LoginModalState.CHECKOUT)
-    }
-  })
-
-  useEffect(() => {
-    root.addEventListener('scroll', handleHomeScroll)
-
-    return () => {
-      if (buttons) {
-        document.body.removeChild(buttons)
-      }
-      root.removeEventListener('scroll', handleHomeScroll)
-    }
-  }, [])
-
-  useEffect(() => {
-    characterListRef.current = characterList
-  }, [characterList])
-
-  async function fetchData() {
-    const { data, total } = await listCharacter()
-    setCharacterList(data)
-    totalRef.current = total
-    setTotal(total)
 
     setTimeout(() => {
       const { clientWidth: containerWidth } = containerRef.current!
@@ -113,6 +87,75 @@ export default function Home() {
         setTagList(shortTagsRef.current)
       }
     }, 0)
+
+    if (
+      searchParams.get('message_type') === 'stripe_callback' &&
+      !!searchParams.get('message')
+    ) {
+      setLoginModalState(LoginModalState.CHECKOUT)
+    }
+
+    root.addEventListener('scroll', handleHomeScroll)
+  }
+
+  function exit() {
+    if (buttons) {
+      document.body.removeChild(buttons)
+    }
+    root.removeEventListener('scroll', handleHomeScroll)
+  }
+
+  useEffect(() => {
+    characterListRef.current = characterList
+  }, [characterList])
+
+  // async function fetchData() {
+  //   const { data, total } = await listCharacter()
+  //   setCharacterList(data)
+  //   totalRef.current = total
+  //   setTotal(total)
+  // }
+
+  async function fetchData(page?: number) {
+    switch (tagTypeRef.current) {
+      case 'all':
+        const { data: allList, total: allTotal } = await listCharacter(page)
+
+        setCharacterList([...characterListRef.current, ...allList])
+        setTotal(allTotal)
+        break
+      case 'fav':
+        const { data: favList, total: favTotal } =
+          await listFavouriteCharacter(page)
+
+        setCharacterList([...characterListRef.current, ...favList])
+        setTotal(favTotal)
+        if (favTotal === 0) {
+          setEmptyMsg(`💔 You haven't liked a Character yet.`)
+        }
+        break
+      case 'my':
+        const { data: myList, total: myTotal } = await listMyCharacter(page)
+
+        setCharacterList([...characterListRef.current, ...myList])
+        setTotal(myTotal)
+        if (myTotal === 0) {
+          setEmptyMsg(`🤖 You haven't created any Characters yet.`)
+        }
+        break
+      default:
+        const { data: tagList, total: tagTotal } = await listCharacterByTag(
+          tagTypeRef.current,
+          page,
+        )
+
+        setCharacterList([...characterListRef.current, ...tagList])
+        setTotal(tagTotal)
+        if (tagTotal === 0) {
+          setEmptyMsg(`🤖 No Characters with current tag`)
+        }
+        break
+    }
   }
 
   function toggleShowAll() {
@@ -126,41 +169,11 @@ export default function Home() {
     setShowAll(true)
   }
 
-  async function fetchCharacterList(type: string) {
+  async function handleTagClick(type: string) {
+    tagTypeRef.current = type
     setTagType(type)
-    let list = []
-
-    switch (type) {
-      case 'all':
-        const { data } = await listCharacter()
-        list = data
-        setEmptyMsg('')
-        break
-      case 'fav':
-        list = await listFavouriteCharacter()
-        if (list.length === 0) {
-          setEmptyMsg(`💔 You haven't liked a Character yet.`)
-        }
-        break
-      case 'my':
-        list = await listMyCharacter()
-        if (list.length === 0) {
-          setEmptyMsg(`🤖 You haven't created any Characters yet.`)
-        }
-        break
-      default:
-        list = await listCharacterByTag(parseInt(type))
-        if (list.length === 0) {
-          setEmptyMsg(`🤖 No Characters with current tag`)
-        }
-        break
-    }
-
-    if (list.toString() === characterList.toString()) {
-      return
-    }
-
-    setCharacterList(list)
+    characterListRef.current = []
+    fetchData()
   }
 
   const handleHomeScroll = async () => {
@@ -168,14 +181,13 @@ export default function Home() {
       return
     }
 
-    if (characterListRef.current.length === totalRef.current) {
+    if (characterListRef.current.length === total) {
       setEnd(true)
       return
     }
 
     pageRef.current += 1
-    const { data } = await listCharacter(pageRef.current)
-    setCharacterList([...characterListRef.current, ...data])
+    fetchData(pageRef.current)
   }
 
   function getClassByTagType(type: string) {
@@ -205,7 +217,7 @@ export default function Home() {
         >
           <div ref={tagsRef} className="flex w-0 flex-1 flex-wrap gap-2 py-4">
             <Button
-              onClick={() => fetchCharacterList('all')}
+              onClick={() => handleTagClick('all')}
               className={`text-12px rounded-8px hover:text-pink-700! border-none bg-pink-100 text-pink-700 hover:bg-pink-200 ${getClassByTagType(
                 'all',
               )}`}
@@ -213,7 +225,7 @@ export default function Home() {
               🔦 Discover
             </Button>
             <Button
-              onClick={() => fetchCharacterList('fav')}
+              onClick={() => handleTagClick('fav')}
               className={`text-12px rounded-8px hover:text-pink-700! border-none bg-pink-100 text-pink-700 hover:bg-pink-200 ${getClassByTagType(
                 'fav',
               )}`}
@@ -221,7 +233,7 @@ export default function Home() {
               💖 Favourite
             </Button>
             <Button
-              onClick={() => fetchCharacterList('my')}
+              onClick={() => handleTagClick('my')}
               className={`text-12px rounded-8px hover:text-pink-700! border-none bg-pink-100 text-pink-700 hover:bg-pink-200 ${getClassByTagType(
                 'my',
               )}`}
@@ -232,7 +244,7 @@ export default function Home() {
             {tagList.map(({ id, name, emoji }) => (
               <Button
                 key={id}
-                onClick={() => fetchCharacterList(id.toString())}
+                onClick={() => handleTagClick(id.toString())}
                 className={`text-12px rounded-8px hover:text-black! border-none bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 ${getClassByTagType(
                   id.toString(),
                 )}`}

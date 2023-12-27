@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { useLifecycles } from 'react-use'
 
 import { Character, listTopCharacter } from '@/api/character'
-import { useMount } from '@/hooks'
 
 import { Header } from './Header'
 import { RestItem } from './RestItem'
@@ -10,7 +10,7 @@ import { TopItem } from './TopItem'
 export function TopCharacters() {
   const [list, setList] = useState<Character[]>([])
 
-  useMount(() => fetchData())
+  useLifecycles(() => fetchData())
 
   async function fetchData() {
     const _list = await listTopCharacter()

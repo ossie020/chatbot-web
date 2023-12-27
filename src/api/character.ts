@@ -55,16 +55,29 @@ export async function listCharacter(page: number = 1) {
   })
 }
 
-export async function listMyCharacter() {
-  return get<Character[]>('/character/', { rating: getRating() })
+export async function listMyCharacter(page: number = 1) {
+  return get<PageResponse<Character>>('/character/', {
+    page,
+    count: 20,
+    rating: getRating(),
+  })
 }
 
-export async function listFavouriteCharacter() {
-  return get<Character[]>('/character/favourite/', { rating: getRating() })
+export async function listFavouriteCharacter(page: number = 1) {
+  return get<PageResponse<Character>>('/character/favourite/', {
+    page,
+    count: 20,
+    rating: getRating(),
+  })
 }
 
-export async function listCharacterByTag(tag_id: number) {
-  return get<Character[]>('/character/tag/', { tag_id, rating: getRating() })
+export async function listCharacterByTag(tag_id: string, page: number = 1) {
+  return get<PageResponse<Character>>('/character/tag/', {
+    tag_id,
+    page,
+    count: 20,
+    rating: getRating(),
+  })
 }
 
 export async function listRecentCharacter() {
