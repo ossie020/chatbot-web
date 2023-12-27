@@ -49,7 +49,8 @@ export function UpsertForm() {
 
       await createCharacter(data)
       message.success('Success')
-      navigate('/')
+
+
     } catch (error) {
       document
         .querySelector('.ant-form-item-has-error')

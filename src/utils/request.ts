@@ -1,7 +1,10 @@
+import { message } from 'antd'
+import ky from 'ky'
+
 import { API_BASE, KEYS } from './constants'
 
 export async function createCookie(idToken: string) {
-  const resp = await fetch(`${API_BASE}/user/create_cookie/`, {
+  const resp = await ky.get(`${API_BASE}/user/create_cookie/`, {
     headers: {
       Authorization: `Bearer ${idToken}`,
     },
@@ -11,14 +14,6 @@ export async function createCookie(idToken: string) {
 }
 
 async function handleResponse<T>(resp: Response) {
-  if (resp.status === 401) {
-    throw new Error(resp.statusText)
-  }
-
-  if (resp.status !== 200) {
-    throw new Error(resp.statusText)
-  }
-
   const { code, msg, data }: CommonResponse<T> = await resp.json()
   if (code !== 200) {
     throw new Error(msg)
@@ -28,33 +23,40 @@ async function handleResponse<T>(resp: Response) {
 }
 
 export async function post<T>(path: string, data: any = {}) {
-  const resp = await fetch(`${API_BASE}${path}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
-    },
-    body: JSON.stringify(data),
-  })
+  try {
+    const resp = await ky.post(`${API_BASE}${path}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
+      },
+      json: data,
+    })
 
-  return handleResponse<T>(resp)
+    return handleResponse<T>(resp)
+  } catch (error: any) {
+    message.error(error.message)
+    throw error
+  }
 }
 
 export async function get<T>(path: string, data: Record<string, any> = {}) {
-  const params = new URLSearchParams(data)
+  try {
+    const resp = await ky.get(`${API_BASE}${path}`, {
+      headers: {
+        'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
+      },
+      searchParams: data,
+    })
 
-  const resp = await fetch(`${API_BASE}${path}?${params}`, {
-    headers: {
-      'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
-    },
-  })
-
-  return handleResponse<T>(resp)
+    return handleResponse<T>(resp)
+  } catch (error: any) {
+    message.error(error.message)
+    throw error
+  }
 }
 
 export async function postForm<T>(path: string, formData: FormData) {
-  const resp = await fetch(`${API_BASE}${path}`, {
-    method: 'POST',
+  const resp = await ky.post(`${API_BASE}${path}`, {
     headers: {
       'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
     },

@@ -28,7 +28,7 @@ export function RecentlyChatted() {
 
   function renderEmpty() {
     return (
-      <div className="flex-center text-gray-500">
+      <div className="flex-center text-gray-500 h-full">
         🤔 You haven't chat with any character yet.
       </div>
     )

@@ -30,7 +30,7 @@ export interface Character {
 
 export interface ChattedCharacter {
   id: number
-  character_id: number
+  character_id: string
   chat_key: string
   content: string
   character: Character
@@ -98,7 +98,7 @@ export async function searchCharacter(keyword: string) {
   })
 }
 
-export async function getCharacter(character_id: number) {
+export async function getCharacter(character_id: string) {
   return get<Character>('/character/detail/', { character_id })
 }
 
@@ -110,6 +110,6 @@ export async function listTag() {
   return get<Tag[]>('/tag/')
 }
 
-export async function getChatKey(character_id: number) {
+export async function getChatKey(character_id: string) {
   return get<{ chat_key: string }>('/character/last_history/', { character_id })
 }

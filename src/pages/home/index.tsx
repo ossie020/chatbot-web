@@ -2,7 +2,7 @@ import { Button, Switch } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { HiOutlineChevronDown, HiOutlineChevronUp } from 'react-icons/hi'
 import { useSearchParams } from 'react-router-dom'
-import { useLifecycles } from 'react-use'
+import { useIsomorphicLayoutEffect } from 'react-use'
 
 import {
   Character,
@@ -23,6 +23,7 @@ import { CreateButton } from './components/CreateButton'
 import { RecentlyChatted } from './components/RecentlyChatted'
 import { SiteInfo } from './components/SiteInfo'
 import { TopCharacters } from './components/TopCharacters'
+import { debounce } from '@/utils'
 
 export default function Home() {
   const [searchParams] = useSearchParams()
@@ -34,21 +35,26 @@ export default function Home() {
   const tagsRef = useRef<HTMLDivElement | null>(null)
   const shortTagsRef = useRef<Tag[]>([])
   const pageRef = useRef(1)
-  const totalRef = useRef(0)
   const tagTypeRef = useRef('all')
+  const endRef = useRef(false)
   const [tagType, setTagType] = useState('all')
   const [tagList, setTagList] = useState<Tag[]>([])
   const [showAll, setShowAll] = useState(false)
   const [emptyMsg, setEmptyMsg] = useState('')
-  const [end, setEnd] = useState(false)
   const [total, setTotal] = useState(-1)
+  const [loading, setLoading] = useState(false)
 
   let wrapIndex = 0
   const moreTag = wrapIndex < allTagsRef.current.length
   let buttons: HTMLDivElement | null = null
   const root = document.getElementById('root')!
 
-  useLifecycles(init, exit)
+
+  useIsomorphicLayoutEffect(() => {
+    init()
+
+    return () => exit()
+  }, [])
 
   function init() {
     fetchData()
@@ -109,20 +115,17 @@ export default function Home() {
     characterListRef.current = characterList
   }, [characterList])
 
-  // async function fetchData() {
-  //   const { data, total } = await listCharacter()
-  //   setCharacterList(data)
-  //   totalRef.current = total
-  //   setTotal(total)
-  // }
-
   async function fetchData(page?: number) {
+    setLoading(true)
     switch (tagTypeRef.current) {
       case 'all':
         const { data: allList, total: allTotal } = await listCharacter(page)
 
         setCharacterList([...characterListRef.current, ...allList])
         setTotal(allTotal)
+        if (allList.length === 0) {
+          endRef.current = true
+        }
         break
       case 'fav':
         const { data: favList, total: favTotal } =
@@ -130,6 +133,9 @@ export default function Home() {
 
         setCharacterList([...characterListRef.current, ...favList])
         setTotal(favTotal)
+        if (favList.length === 0) {
+          endRef.current = true
+        }
         if (favTotal === 0) {
           setEmptyMsg(`💔 You haven't liked a Character yet.`)
         }
@@ -139,6 +145,9 @@ export default function Home() {
 
         setCharacterList([...characterListRef.current, ...myList])
         setTotal(myTotal)
+        if (myList.length === 0) {
+          endRef.current = true
+        }
         if (myTotal === 0) {
           setEmptyMsg(`🤖 You haven't created any Characters yet.`)
         }
@@ -151,10 +160,18 @@ export default function Home() {
 
         setCharacterList([...characterListRef.current, ...tagList])
         setTotal(tagTotal)
+        if (tagList.length === 0) {
+          endRef.current = true
+        }
         if (tagTotal === 0) {
           setEmptyMsg(`🤖 No Characters with current tag`)
         }
         break
+    }
+    setLoading(false)
+
+    if (page) {
+      pageRef.current = page
     }
   }
 
@@ -169,25 +186,44 @@ export default function Home() {
     setShowAll(true)
   }
 
+  function reset() {
+    root.scrollTop = 0
+    pageRef.current = 1
+    endRef.current = false
+    characterListRef.current = []
+  }
+
   async function handleTagClick(type: string) {
+    reset()
     tagTypeRef.current = type
     setTagType(type)
-    characterListRef.current = []
     fetchData()
   }
 
-  const handleHomeScroll = async () => {
+  const handleHomeScroll = debounce(async () => {
     if (root.scrollHeight - root.scrollTop !== root.clientHeight) {
       return
     }
 
-    if (characterListRef.current.length === total) {
-      setEnd(true)
+    if (!!endRef.current) {
       return
     }
 
-    pageRef.current += 1
-    fetchData(pageRef.current)
+    if (characterListRef.current.length === total) {
+      return
+    }
+
+    if (loading) {
+      return
+    }
+
+    await fetchData(pageRef.current + 1)
+  }, 300)
+
+  async function toggleNsfw(value: boolean) {
+    localStorage.setItem(KEYS.NSFW, value.toString())
+    reset()
+    fetchData(1)
   }
 
   function getClassByTagType(type: string) {
@@ -266,17 +302,15 @@ export default function Home() {
             <span>NSFW</span>
             <Switch
               defaultChecked
-              onChange={(value) =>
-                localStorage.setItem(KEYS.NSFW, value.toString())
-              }
+              onChange={toggleNsfw}
             />
           </div>
         </div>
 
         {characterList.length ? (
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-            {characterList.map((character) => (
-              <CharacterCard key={character.id} {...character} />
+            {characterList.map((character, index) => (
+              <CharacterCard key={`${character.id}_${index}`} {...character} />
             ))}
           </div>
         ) : (
@@ -285,7 +319,7 @@ export default function Home() {
           </div>
         )}
 
-        {characterList.length !== total && <DataLoading />}
+        {loading && <DataLoading />}
       </div>
     </div>
   )

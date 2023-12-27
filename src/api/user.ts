@@ -20,11 +20,11 @@ export async function updateUser(user: Partial<User>) {
   return post('/user/update/', user)
 }
 
-export async function likeCharacter(character_id: number) {
+export async function likeCharacter(character_id: string) {
   return get('/user/like/', { character_id })
 }
 
-export async function dislikeCharacter(character_id: number) {
+export async function dislikeCharacter(character_id: string) {
   return get('/user/dislike/', { character_id })
 }
 

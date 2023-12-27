@@ -28,7 +28,7 @@ export function CharacterCard(character: Character) {
     >
       <img
         src={avatar}
-        className="h-112px w-112px rounded-bl-xl rounded-tl-xl"
+        className="h-112px w-112px rounded-bl-xl rounded-tl-xl object-cover"
       />
       <div className="flex-1 px-5 py-2">
         <div className="text-18px font-700">{name}</div>
