@@ -1,7 +1,7 @@
 import { API_BASE, KEYS } from '@/utils/constants'
 import { get } from '@/utils/request'
 
-export async function createChatKey(character_id: number) {
+export async function createChatKey(character_id: string) {
   return get<{ chat_key: string }>('/bot/create/', { character_id })
 }
 

@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom'
+import { useLifecycles } from 'react-use'
 
 import { getCharacter } from '@/api/character'
 import { listChatHistory } from '@/api/chat'
 import { PlanModal } from '@/components/Layout/Header/PlanModal'
-import { useMount } from '@/hooks'
 import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
 import { Message, useChatStore } from '@/stores/chat'
@@ -14,11 +14,11 @@ import { Header } from './components/Header'
 
 export default function Chat() {
   const { id, chat_key } = useParams()
-  const { chatKeyRef, setMessages } = useChatStore()
+  const { chatKeyRef, setMessages, reset } = useChatStore()
   const { setCharacter } = useCharacterStore()
   const { planOpen, setPlanOpen } = useAppStore()
 
-  useMount(init)
+  useLifecycles(init, exit)
 
   async function init() {
     chatKeyRef.current = chat_key!
@@ -37,6 +37,11 @@ export default function Chat() {
       type: item.type === 'user' ? 'user' : 'chatbot',
     }))
     setMessages(messages)
+  }
+
+  function exit() {
+    setCharacter({})
+    reset()
   }
 
   return (

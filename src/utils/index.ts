@@ -44,3 +44,26 @@ export function dataURLtoBlob(dataURL: string, fileName: string) {
 export function calcDays(start: number, end: number) {
   return Math.ceil(Math.abs(end - start) / (3600 * 24 * 1000))
 }
+
+export function throttle(fn: (...arg: any[]) => any, interval: number = 300) {
+  let lock = false
+  return function (this: unknown, ...args: any[]) {
+    if (lock) return
+    lock = true
+    setTimeout(() => (lock = false), interval)
+    fn.bind(this)(...args)
+  }
+}
+
+export function debounce(fn: (...arg: any[]) => any, duration: number = 300) {
+  let timer = -1
+  return function (this: unknown, ...args: any[]) {
+    if (timer > -1) {
+      clearTimeout(timer)
+    }
+    timer = window.setTimeout(() => {
+      fn.bind(this)(...args)
+      timer = -1
+    }, duration)
+  }
+}
