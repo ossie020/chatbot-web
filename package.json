@@ -2,6 +2,7 @@
   "name": "chatbot-web",
   "type": "module",
   "private": true,
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build"
