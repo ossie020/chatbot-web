@@ -1,8 +1,27 @@
 import { Button } from 'antd'
+import { FaDiscord, FaTwitter } from 'react-icons/fa'
 
 export function SiteInfo() {
   return (
-    <div className="mt-48px">
+    <div className="mt-36px">
+      <div className="text-24px flex items-center gap-x-2 mb-24px">
+        <Button
+          type="link"
+          className="text-24px flex items-center px-0 text-gray-100"
+          href="https://twitter.com/JuicyAI2024"
+          target="_blank"
+        >
+          <FaTwitter className="mr-2 w-8" />
+        </Button>
+        <Button
+          type="link"
+          href="https://discord.com/invite/DvttVEuJbA"
+          target="_blank"
+          className="text-24px flex items-center px-0 text-gray-100"
+        >
+          <FaDiscord className="mr-2 w-8" />
+        </Button>
+      </div>
       <div className="text-12px flex items-center gap-x-2 text-gray-500">
         <Button type="link" className="text-12px px-0 text-gray-500">
           Contact Us
