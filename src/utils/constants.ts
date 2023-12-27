@@ -1,4 +1,5 @@
-export const API_BASE = 'https://stage.airpg.io'
+// export const API_BASE = 'https://stage.airpg.io' // text
+export const API_BASE = 'https://api.airpg.io' // release
 export const KEYS = {
   COOKIE: 'gensoul-cookie',
   DARK: 'dark',
