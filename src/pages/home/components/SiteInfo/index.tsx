@@ -7,7 +7,7 @@ export function SiteInfo() {
       <div className="text-24px flex items-center gap-x-2 mb-24px">
         <Button
           type="link"
-          className="text-24px flex items-center px-0 text-gray-100"
+          className="text-24px flex items-center px-0 hover:text-pink-700! border-none text-pink-400"
           href="https://twitter.com/JuicyAI2024"
           target="_blank"
         >
@@ -17,7 +17,7 @@ export function SiteInfo() {
           type="link"
           href="https://discord.com/invite/DvttVEuJbA"
           target="_blank"
-          className="text-24px flex items-center px-0 text-gray-100"
+          className="text-24px flex items-center px-0 hover:text-pink-700! border-none text-pink-400"
         >
           <FaDiscord className="mr-2 w-8" />
         </Button>
