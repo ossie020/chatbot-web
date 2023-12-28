@@ -55,8 +55,6 @@ export function UpsertForm() {
       const { chat_key } = await createChatKey(character_id)
       message.success('Success')
       navigate(`/character/${character_id}/chat/${chat_key}`)
-
-
     } catch (error) {
       document
         .querySelector('.ant-form-item-has-error')

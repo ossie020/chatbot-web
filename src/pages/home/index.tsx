@@ -37,11 +37,12 @@ export default function Home() {
   const pageRef = useRef(1)
   const tagTypeRef = useRef('all')
   const endRef = useRef(false)
+  const totalRef = useRef(0)
+  const loadingRef = useRef(false)
   const [tagType, setTagType] = useState('all')
   const [tagList, setTagList] = useState<Tag[]>([])
   const [showAll, setShowAll] = useState(false)
   const [emptyMsg, setEmptyMsg] = useState('')
-  const [total, setTotal] = useState(-1)
   const [loading, setLoading] = useState(false)
 
   let wrapIndex = 0
@@ -122,25 +123,20 @@ export default function Home() {
 
   async function fetchData(page?: number) {
     setLoading(true)
+    loadingRef.current = true
     switch (tagTypeRef.current) {
       case 'all':
         const { data: allList, total: allTotal } = await listCharacter(page)
 
         setCharacterList([...characterListRef.current, ...allList])
-        setTotal(allTotal)
-        if (allList.length === 0) {
-          endRef.current = true
-        }
+        totalRef.current = allTotal
         break
       case 'fav':
         const { data: favList, total: favTotal } =
           await listFavouriteCharacter(page)
 
         setCharacterList([...characterListRef.current, ...favList])
-        setTotal(favTotal)
-        if (favList.length === 0) {
-          endRef.current = true
-        }
+        totalRef.current = favTotal
         if (favTotal === 0) {
           setEmptyMsg(`💔 You haven't liked a Character yet.`)
         }
@@ -149,10 +145,7 @@ export default function Home() {
         const { data: myList, total: myTotal } = await listMyCharacter(page)
 
         setCharacterList([...characterListRef.current, ...myList])
-        setTotal(myTotal)
-        if (myList.length === 0) {
-          endRef.current = true
-        }
+        totalRef.current = myTotal
         if (myTotal === 0) {
           setEmptyMsg(`🤖 You haven't created any Characters yet.`)
         }
@@ -164,16 +157,14 @@ export default function Home() {
         )
 
         setCharacterList([...characterListRef.current, ...tagList])
-        setTotal(tagTotal)
-        if (tagList.length === 0) {
-          endRef.current = true
-        }
+        totalRef.current = tagTotal
         if (tagTotal === 0) {
           setEmptyMsg(`🤖 No Characters with current tag`)
         }
         break
     }
     setLoading(false)
+    loadingRef.current = false
 
     if (page) {
       pageRef.current = page
@@ -211,19 +202,20 @@ export default function Home() {
       return
     }
 
-    if (!!endRef.current) {
+    if (endRef.current) {
       return
     }
 
-    if (characterListRef.current.length === total) {
+    if (characterListRef.current.length === totalRef.current) {
+      endRef.current = true
       return
     }
 
-    if (loading) {
+    if (loadingRef.current) {
       return
     }
 
-    await fetchData(pageRef.current + 1)
+    fetchData(pageRef.current + 1)
   }, 300)
 
   async function toggleNsfw(value: boolean) {
