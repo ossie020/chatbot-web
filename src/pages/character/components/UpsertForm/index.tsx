@@ -9,6 +9,7 @@ import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
 
 import { extras } from './Extra'
+import { createChatKey } from '@/api/chat'
 
 const { Item: FormItem, useForm } = Form
 const { Option } = Select
@@ -22,12 +23,15 @@ export function UpsertForm() {
 
   const [form] = useForm()
   const [avatar, setAvatar] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
   }, [])
 
   async function submit() {
+    setLoading(true)
+
     try {
       const data = await form.validateFields()
 
@@ -47,14 +51,16 @@ export function UpsertForm() {
       data.talks_count = 0
       data.prompt = ''
 
-      await createCharacter(data)
+      const { character_id } = await createCharacter(data)
+      const { chat_key } = await createChatKey(character_id)
       message.success('Success')
-
-
+      navigate(`/character/${character_id}/chat/${chat_key}`)
     } catch (error) {
       document
         .querySelector('.ant-form-item-has-error')
         ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -224,6 +230,7 @@ export function UpsertForm() {
           size="large"
           className="flex-center"
           block
+          loading={loading}
           onClick={submit}
         >
           <img src={Magic} className="h-5 w-5" />

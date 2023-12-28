@@ -4,7 +4,7 @@ import { get, post } from '@/utils/request'
 import type { User } from './user'
 
 export interface Character {
-  id: number
+  id: string
   uid: string
   name: string
   avatar: string
@@ -103,7 +103,7 @@ export async function getCharacter(character_id: string) {
 }
 
 export async function createCharacter(character: Partial<Character>) {
-  return post('/character/create/', character)
+  return post<{ character_id: string }>('/character/create/', character)
 }
 
 export async function listTag() {

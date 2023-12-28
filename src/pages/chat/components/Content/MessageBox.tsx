@@ -56,6 +56,9 @@ export function MessageBox({ type, message, isLastChatbot }: Props) {
           className="whitespace-pre-wrap"
           children={message.replace(/\\n/g, '&#10;')}
           components={{
+            p({ children }) {
+              return <p style={{ wordBreak: 'break-word' }}>{children}</p>
+            },
             strong({ children }) {
               return <strong className="font-900">{children}</strong>
             },
