@@ -27,7 +27,7 @@ import { debounce } from '@/utils'
 
 export default function Home() {
   const [searchParams] = useSearchParams()
-  const { setLoginModalState, allTagsRef } = useAppStore()
+  const { setLoginModalState, allTagsRef, allTagList } = useAppStore()
   const { characterList, setCharacterList } = useCharacterStore()
 
   const characterListRef = useRef<Character[]>([])
@@ -49,50 +49,24 @@ export default function Home() {
   let buttons: HTMLDivElement | null = null
   const root = document.getElementById('root')!
 
-
   useIsomorphicLayoutEffect(() => {
     init()
 
     return () => exit()
   }, [])
 
+  useEffect(() => {
+    if (allTagList.length > 0) {
+      initTag()
+    }
+  }, [allTagList])
+
+  useEffect(() => {
+    characterListRef.current = characterList
+  }, [characterList])
+
   function init() {
     fetchData()
-
-    setTimeout(() => {
-      const { clientWidth: containerWidth } = containerRef.current!
-
-      buttons = document.createElement('div')
-      buttons.style.visibility = 'hidden'
-      buttons.style.position = 'absolute'
-      buttons.style.top = '0'
-      buttons.style.left = '0'
-      buttons.style.display = 'inline-block'
-      document.body.appendChild(buttons)
-
-      for (; wrapIndex < allTagsRef.current.length; wrapIndex++) {
-        const { name, emoji } = allTagsRef.current[wrapIndex]
-
-        const button = document.createElement('button')
-        button.style.padding = '0 15px'
-        button.style.visibility = 'hidden'
-        button.style.fontSize = '12px'
-        button.style.marginRight = '0.5rem'
-        button.innerText = `${emoji} ${name}`
-        buttons.appendChild(button)
-
-        if (buttons.clientWidth + 138 + 332 > containerWidth) {
-          break
-        }
-      }
-
-      if (wrapIndex === allTagsRef.current.length - 1) {
-        setTagList(allTagsRef.current)
-      } else {
-        shortTagsRef.current = allTagsRef.current.slice(0, wrapIndex)
-        setTagList(shortTagsRef.current)
-      }
-    }, 0)
 
     if (
       searchParams.get('message_type') === 'stripe_callback' &&
@@ -111,9 +85,40 @@ export default function Home() {
     root.removeEventListener('scroll', handleHomeScroll)
   }
 
-  useEffect(() => {
-    characterListRef.current = characterList
-  }, [characterList])
+  function initTag() {
+    const { clientWidth: containerWidth } = containerRef.current!
+
+    buttons = document.createElement('div')
+    buttons.style.visibility = 'hidden'
+    buttons.style.position = 'absolute'
+    buttons.style.top = '0'
+    buttons.style.left = '0'
+    buttons.style.display = 'inline-block'
+    document.body.appendChild(buttons)
+
+    for (; wrapIndex < allTagsRef.current.length; wrapIndex++) {
+      const { name, emoji } = allTagsRef.current[wrapIndex]
+
+      const button = document.createElement('button')
+      button.style.padding = '0 15px'
+      button.style.visibility = 'hidden'
+      button.style.fontSize = '12px'
+      button.style.marginRight = '0.5rem'
+      button.innerText = `${emoji} ${name}`
+      buttons.appendChild(button)
+
+      if (buttons.clientWidth + 138 + 332 > containerWidth) {
+        break
+      }
+    }
+
+    if (wrapIndex === allTagsRef.current.length - 1) {
+      setTagList(allTagsRef.current)
+    } else {
+      shortTagsRef.current = allTagsRef.current.slice(0, wrapIndex)
+      setTagList(shortTagsRef.current)
+    }
+  }
 
   async function fetchData(page?: number) {
     setLoading(true)
@@ -190,7 +195,8 @@ export default function Home() {
     root.scrollTop = 0
     pageRef.current = 1
     endRef.current = false
-    characterListRef.current = []
+    setCharacterList([])
+    setEmptyMsg('')
   }
 
   async function handleTagClick(type: string) {

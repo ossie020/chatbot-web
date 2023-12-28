@@ -5,23 +5,31 @@ import { type Character, getChatKey } from '@/api/character'
 import { useAppStore } from '@/stores/app'
 import { LoginModalState } from '@/utils/enums'
 import { createChatKey } from '@/api/chat'
+import { useRef } from 'react'
 
 export function CharacterCard(character: Character) {
   const { user: authedUser, setLoginModalState } = useAppStore()
   const { id, avatar, name, likes_count, talks_count, introduction, user } =
     character
   const navigate = useNavigate()
+  const loadingRef = useRef(false)
 
   async function toChat() {
+    if (loadingRef.current) {
+      return
+    }
+
     if (!authedUser.uid) {
       setLoginModalState(LoginModalState.LOGIN)
       return
     }
 
+    loadingRef.current = true
     let result = await getChatKey(id)
     if (!result.chat_key) {
       result = await createChatKey(id)
     }
+    loadingRef.current = false
     navigate(`/character/${id}/chat/${result.chat_key}`)
   }
 
@@ -38,7 +46,7 @@ export function CharacterCard(character: Character) {
           background:
             'linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.60) 100%)',
         }}
-        className="absolute top-0 left-0 right-0 bottom-0"
+        className="absolute top-0 left-0 right-0 bottom-0 rounded-xl"
       />
 
       <div className="flex-between z-1">
