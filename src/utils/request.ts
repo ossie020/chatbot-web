@@ -23,36 +23,26 @@ async function handleResponse<T>(resp: Response) {
 }
 
 export async function post<T>(path: string, data: any = {}) {
-  try {
-    const resp = await ky.post(`${API_BASE}${path}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
-      },
-      json: data,
-    })
+  const resp = await ky.post(`${API_BASE}${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
+    },
+    json: data,
+  })
 
-    return handleResponse<T>(resp)
-  } catch (error: any) {
-    message.error(error.message)
-    throw error
-  }
+  return handleResponse<T>(resp)
 }
 
 export async function get<T>(path: string, data: Record<string, any> = {}) {
-  try {
-    const resp = await ky.get(`${API_BASE}${path}`, {
-      headers: {
-        'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
-      },
-      searchParams: data,
-    })
+  const resp = await ky.get(`${API_BASE}${path}`, {
+    headers: {
+      'gensoul-cookie': localStorage.getItem(KEYS.COOKIE) || '',
+    },
+    searchParams: data,
+  })
 
-    return handleResponse<T>(resp)
-  } catch (error: any) {
-    message.error(error.message)
-    throw error
-  }
+  return handleResponse<T>(resp)
 }
 
 export async function postForm<T>(path: string, formData: FormData) {
