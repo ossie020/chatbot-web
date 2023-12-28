@@ -30,9 +30,9 @@ export function CharacterCard(character: Character) {
         src={avatar}
         className="h-112px w-112px rounded-bl-xl rounded-tl-xl object-cover"
       />
-      <div className="flex-1 px-5 py-2">
+      <div className="flex-1 px-5 py-1 flex flex-col">
         <div className="text-18px font-700">{name}</div>
-        <div className="text-14px font-400 line-clamp-2 text-gray-500">
+        <div className="text-14px font-400 line-clamp-2 text-gray-500 flex-1">
           {introduction}
         </div>
         <div className="flex-between h-32px">
