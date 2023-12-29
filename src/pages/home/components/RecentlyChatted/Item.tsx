@@ -22,7 +22,10 @@ export function Item({
       onClick={toChat}
       className="flex w-full max-h-48px items-center rounded-lg hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
     >
-      <img src={avatar} className="h-12 w-12 rounded-full object-cover" />
+      <img
+        src={avatar}
+        className="h-12 w-12 min-w-12 rounded-full object-cover"
+      />
       <div className="ml-2.5 flex-1">
         <div className="flex items-center">
           <p className="text-sm dark:text-white">{name}</p>

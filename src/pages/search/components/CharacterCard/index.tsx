@@ -1,19 +1,27 @@
+import { useRef } from 'react'
 import { HiOutlineFire, HiOutlineHeart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
-import { getChatKey, type Character } from '@/api/character'
+import { type Character, getChatKey } from '@/api/character'
 import { createChatKey } from '@/api/chat'
 
 export function CharacterCard(character: Character) {
   const { id, avatar, name, likes_count, talks_count, introduction, user } =
     character
   const navigate = useNavigate()
+  const loadingRef = useRef(false)
 
   async function toChat() {
+    if (loadingRef.current) {
+      return
+    }
+
+    loadingRef.current = true
     let result = await getChatKey(id)
     if (!result.chat_key) {
       result = await createChatKey(id)
     }
+    loadingRef.current = false
     navigate(`/character/${id}/chat/${result.chat_key}`)
   }
 

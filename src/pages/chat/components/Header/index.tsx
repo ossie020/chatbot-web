@@ -23,7 +23,7 @@ export function Header() {
 
   function toHome() {
     reset()
-    navigate('/')
+    navigate(-1)
   }
 
   return (
