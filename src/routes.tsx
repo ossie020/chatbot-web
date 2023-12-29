@@ -1,6 +1,6 @@
 import { Suspense, lazy } from 'react'
 import type { LazyExoticComponent } from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { createHashRouter } from 'react-router-dom'
 
 import { Layout } from './components/Layout'
 import { PageLoading } from './components/PageLoading'
@@ -18,7 +18,7 @@ const Character = asyncRoute(lazy(() => import('./pages/character')))
 const Chat = asyncRoute(lazy(() => import('./pages/chat')))
 const Search = asyncRoute(lazy(() => import('./pages/search')))
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <Layout />,
