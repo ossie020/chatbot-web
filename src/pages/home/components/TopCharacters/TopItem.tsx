@@ -2,10 +2,10 @@ import { HiFire, HiHeart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 import { Character, getChatKey } from '@/api/character'
+import { createChatKey } from '@/api/chat'
 import Star from '@/assets/svg/star.svg'
 import { useAppStore } from '@/stores/app'
 import { LoginModalState } from '@/utils/enums'
-import { createChatKey } from '@/api/chat'
 
 type Props = Character & {
   rank: number
@@ -60,11 +60,9 @@ export function TopItem(character: Props) {
             <p>{likes_count}</p>
           </div>
         </div>
-        <div
-          style={{ backgroundImage: `url(${Star})` }}
-          className="flex h-8 w-8 items-center justify-center bg-contain bg-center bg-no-repeat text-sm text-white"
-        >
-          #{rank}
+        <div className="relative flex-center h-8 w-8 text-sm text-white">
+          <img src={Star} className="w-full h-full absolute top-0 left-0" />
+          <span className="z-2">#{rank}</span>
         </div>
       </div>
     </div>
