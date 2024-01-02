@@ -2,6 +2,8 @@ import { ConfigProvider } from 'antd'
 import { RouterProvider } from 'react-router-dom'
 import { useLifecycles } from 'react-use'
 
+import '@/utils/firebase'
+
 import { router } from './routes'
 import { useAppStore } from './stores/app'
 import { darkTheme, theme } from './utils/antd'
