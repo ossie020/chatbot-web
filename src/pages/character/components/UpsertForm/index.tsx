@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { createCharacter } from '@/api/character'
+import { createChatKey } from '@/api/chat'
 import Magic from '@/assets/svg/magic.svg'
 import { AvatarUpload } from '@/components/AvatarUpload'
+import { CardImport } from '@/components/CardImport'
 import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
 
 import { extras } from './Extra'
-import { createChatKey } from '@/api/chat'
 
 const { Item: FormItem, useForm } = Form
 const { Option } = Select
@@ -67,6 +68,10 @@ export function UpsertForm() {
   return (
     <>
       <Form form={form} layout="vertical">
+        <FormItem label="Quick Start" extra={extras.quickStart}>
+          <CardImport avatar={avatar} setAvatar={setAvatar} />
+        </FormItem>
+
         <FormItem
           label="Name"
           name="name"
