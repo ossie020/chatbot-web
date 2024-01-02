@@ -1,5 +1,5 @@
 import { Button, Form, Input, Radio, Select, message } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { createCharacter } from '@/api/character'
@@ -25,16 +25,22 @@ export function UpsertForm() {
   const [form] = useForm()
   const [avatar, setAvatar] = useState('')
   const [loading, setLoading] = useState(false)
+  const [botName, setBotName] = useState('')
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
   }, [])
+
+  useEffect(() => {
+    form.setFieldsValue({ name: botName })
+  }, [botName])
 
   async function submit() {
     setLoading(true)
 
     try {
       const data = await form.validateFields()
+      console.log('data', data)
 
       if (!avatar) {
         message.error('Please upload avatar')
@@ -69,7 +75,7 @@ export function UpsertForm() {
     <>
       <Form form={form} layout="vertical">
         <FormItem label="Quick Start" extra={extras.quickStart}>
-          <CardImport setAvatar={setAvatar} />
+          <CardImport setAvatar={setAvatar} setBotName={setBotName} />
         </FormItem>
 
         <FormItem

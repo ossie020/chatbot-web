@@ -5,15 +5,16 @@ import { FaFileImage } from 'react-icons/fa'
 
 import { upload } from '@/api/user'
 import { dataURLtoBlob } from '@/utils'
-import { importCharacter } from '@/utils/char-card'
+import { CharCard, importCharacter } from '@/utils/char-card'
 
 export type Props = {
   setAvatar: (value: string) => void
+  setBotName: (value: string) => void
   width?: string
   height?: string
 }
 
-export function CardImport({ setAvatar }: Props) {
+export function CardImport({ setAvatar, setBotName }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
@@ -37,25 +38,11 @@ export function CardImport({ setAvatar }: Props) {
 
     const format = ext[1].toLowerCase()
 
-    importCharacter(file, format)
+    handleCharCard(file, format)
 
     if (file.type.includes('image')) {
       handleImageFileChange(event)
     }
-
-    if (file.type.includes('text')) {
-      handleTextFileChange(event)
-    }
-  }
-
-  const handleTextFileChange = (event: any) => {
-    console.log('handleTextFileChange')
-    const [file] = event.target.files
-    fileNameRef.current = file.name
-
-    const ext = file.name.match(/\.(\w+)$/)
-
-    console.log(ext)
   }
 
   const handleImageFileChange = (event: any) => {
@@ -82,6 +69,16 @@ export function CardImport({ setAvatar }: Props) {
 
     // 清空文件
     event.target.value = ''
+  }
+
+  const handleCharCard = async (filedata: File, format: string) => {
+    const charCard = await importCharacter(filedata, format)
+    if (!charCard) {
+      message.error('Failed to read character file')
+      return
+    }
+
+    setBotName(charCard.name)
   }
 
   const getCropData = async () => {

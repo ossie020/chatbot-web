@@ -2,22 +2,39 @@ import { Buffer } from 'buffer'
 import PNGtext from 'png-chunk-text'
 import extract from 'png-chunks-extract'
 
-export const importCharacter = async (filedata: File, format: string) => {
-  console.log(format)
-  console.log(filedata)
-  // let png_name = '';
-  // let uploadPath = path.join(UPLOADS_PATH, filedata.filename);
+export type CharCard = {
+  name: string
+}
 
-  if (format == 'png') {
-    try {
-      const img_data = await parseText(filedata, format)
+export const importCharacter = async (
+  filedata: File,
+  format: string,
+): Promise<CharCard | undefined> => {
+  let jsonObj
+  if (format == 'json') {
+    const jsonText = await filedata.text()
+    jsonObj = JSON.parse(jsonText)
+  } else if (format == 'png') {
+    const img_data = await parseText(filedata, format)
+    if (img_data === undefined) throw new Error('Failed to read character file')
+    jsonObj = JSON.parse(img_data)
+  }
 
-      if (img_data === undefined)
-        throw new Error('Failed to read character file')
+  if (jsonObj === undefined) {
+    return undefined
+  }
 
-      let jsonObject = JSON.parse(img_data)
-      console.log(jsonObject)
-    } catch (err) {}
+  console.debug(jsonObj)
+
+  const filename = filedata.name.toLowerCase().replace(`.${format}`, '')
+  if (filename.endsWith('_spec_v2')) {
+    return parseCharaV2(jsonObj)
+  } else if (filename.endsWith('_spec_v1')) {
+    return parseCharaV1(jsonObj)
+  } else if (filename.endsWith('_tavern')) {
+    return parseTavern(jsonObj)
+  } else {
+    return parseCharaV2(jsonObj)
   }
 }
 
@@ -57,4 +74,25 @@ const parseText = async (filedata: File, format: string) => {
   } catch (err) {
     console.log(err)
   }
+}
+
+//chara_card_v2
+const parseTavern = (jsonObj: any): CharCard => {
+  return {
+    name: jsonObj.name || '',
+  }
+}
+
+//chara_card_v2
+const parseCharaV2 = (jsonObj: any): CharCard => {
+  jsonObj.data = jsonObj.data || {}
+  return {
+    name: jsonObj.data.name || '',
+  }
+}
+
+//chara_card_v1
+const parseCharaV1 = (jsonObj: any): CharCard => {
+  //TODO:
+  return parseCharaV2(jsonObj)
 }
