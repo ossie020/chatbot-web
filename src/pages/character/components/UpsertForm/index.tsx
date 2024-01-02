@@ -25,11 +25,12 @@ export function UpsertForm() {
   const [form] = useForm()
   const [avatar, setAvatar] = useState('')
   const [loading, setLoading] = useState(false)
-  const [botName, setBotName] = useState('')
-  const [botIntro, setBotIntro] = useState('')
-  const [botTags, setBotTags] = useState([])
-  const [botGreeting, setBotGreeting] = useState('')
-  const [botPersona, setBotPersona] = useState('')
+  const [botName, setBotName] = useState('') // Name
+  const [botIntro, setBotIntro] = useState('') // Introduction
+  const [botTags, setBotTags] = useState([]) // Tags
+  const [botGreeting, setBotGreeting] = useState('') // Greeting
+  const [botPersona, setBotPersona] = useState('') // Personality
+  const [botSce, setBotSce] = useState('') // Scenario
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
@@ -54,6 +55,14 @@ export function UpsertForm() {
   useEffect(() => {
     form.setFieldsValue({ personality: botPersona })
   }, [botPersona])
+
+  useEffect(() => {
+    form.setFieldsValue({ personality: botPersona })
+  }, [botPersona])
+
+  useEffect(() => {
+    form.setFieldsValue({ scenario: botSce })
+  }, [botSce])
 
   async function submit() {
     setLoading(true)
@@ -102,6 +111,7 @@ export function UpsertForm() {
             setBotTags={setBotTags}
             setBotGreeting={setBotGreeting}
             setBotPersona={setBotPersona}
+            setBotSce={setBotSce}
           />
         </FormItem>
 
