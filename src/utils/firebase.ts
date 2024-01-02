@@ -16,7 +16,7 @@ import {
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAHOdlvYZ1F6SeBetlKIuzWGTEj1QunmVY',
-  authDomain: 'gensoul-e5306.firebaseapp.com',
+  authDomain: 'auth.juicy-ai.com',
   projectId: 'gensoul-e5306',
   storageBucket: 'gensoul-e5306.appspot.com',
   messagingSenderId: '731726780006',
