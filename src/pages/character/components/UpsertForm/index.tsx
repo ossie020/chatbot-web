@@ -26,6 +26,7 @@ export function UpsertForm() {
   const [avatar, setAvatar] = useState('')
   const [loading, setLoading] = useState(false)
   const [botName, setBotName] = useState('')
+  const [botIntro, setBotIntro] = useState('')
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
@@ -34,6 +35,10 @@ export function UpsertForm() {
   useEffect(() => {
     form.setFieldsValue({ name: botName })
   }, [botName])
+
+  useEffect(() => {
+    form.setFieldsValue({ introduction: botIntro })
+  }, [botIntro])
 
   async function submit() {
     setLoading(true)
@@ -75,7 +80,11 @@ export function UpsertForm() {
     <>
       <Form form={form} layout="vertical">
         <FormItem label="Quick Start" extra={extras.quickStart}>
-          <CardImport setAvatar={setAvatar} setBotName={setBotName} />
+          <CardImport
+            setAvatar={setAvatar}
+            setBotName={setBotName}
+            setBotIntro={setBotIntro}
+          />
         </FormItem>
 
         <FormItem

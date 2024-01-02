@@ -10,11 +10,10 @@ import { CharCard, importCharacter } from '@/utils/char-card'
 export type Props = {
   setAvatar: (value: string) => void
   setBotName: (value: string) => void
-  width?: string
-  height?: string
+  setBotIntro: (value: string) => void
 }
 
-export function CardImport({ setAvatar, setBotName }: Props) {
+export function CardImport({ setAvatar, setBotName, setBotIntro }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
@@ -72,13 +71,17 @@ export function CardImport({ setAvatar, setBotName }: Props) {
   }
 
   const handleCharCard = async (filedata: File, format: string) => {
-    const charCard = await importCharacter(filedata, format)
+    const charCard: CharCard | undefined = await importCharacter(
+      filedata,
+      format,
+    )
     if (!charCard) {
       message.error('Failed to read character file')
       return
     }
 
     setBotName(charCard.name)
+    setBotIntro(charCard.intro)
   }
 
   const getCropData = async () => {

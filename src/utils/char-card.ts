@@ -4,6 +4,11 @@ import extract from 'png-chunks-extract'
 
 export type CharCard = {
   name: string
+  intro: string
+  tags: string[]
+  greeting: string
+  personality: string
+  scenario: string
 }
 
 export const importCharacter = async (
@@ -76,22 +81,32 @@ const parseText = async (filedata: File, format: string) => {
   }
 }
 
-//chara_card_v2
+// tavern
 const parseTavern = (jsonObj: any): CharCard => {
   return {
     name: jsonObj.name || '',
+    intro: jsonObj.description || '',
+    tags: jsonObj.tags || [''],
+    greeting: jsonObj.first_mes || '',
+    personality: jsonObj.personality || '',
+    scenario: jsonObj.scenario || '',
   }
 }
 
-//chara_card_v2
+// chara_card_v2
 const parseCharaV2 = (jsonObj: any): CharCard => {
   jsonObj.data = jsonObj.data || {}
   return {
     name: jsonObj.data.name || '',
+    intro: jsonObj.data.description || '',
+    tags: jsonObj.data.tags || [''],
+    greeting: jsonObj.data.first_mes || '',
+    personality: jsonObj.data.personality || '',
+    scenario: jsonObj.data.scenario || '',
   }
 }
 
-//chara_card_v1
+// chara_card_v1
 const parseCharaV1 = (jsonObj: any): CharCard => {
   //TODO:
   return parseCharaV2(jsonObj)
