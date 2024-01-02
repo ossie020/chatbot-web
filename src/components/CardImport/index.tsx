@@ -5,6 +5,7 @@ import { FaFileImage } from 'react-icons/fa'
 
 import { upload } from '@/api/user'
 import { dataURLtoBlob } from '@/utils'
+import { importCharacter } from '@/utils/char-card'
 
 export type Props = {
   avatar: string
@@ -30,6 +31,42 @@ export function CardImport({
   const [loading, setLoading] = useState(false)
 
   function handleFileChange(event: any) {
+    const [file] = event.target.files
+    fileNameRef.current = file.name
+
+    const ext = file.name.match(/\.(\w+)$/)
+    if (
+      !ext ||
+      !['json', 'png', 'yaml', 'yml'].includes(ext[1].toLowerCase())
+    ) {
+      message.error('Please import your JSON file / PNG file / character card.')
+      return
+    }
+
+    const format = ext[1].toLowerCase()
+
+    importCharacter(file, format)
+
+    if (file.type.includes('image')) {
+      handleImageFileChange(event)
+    }
+
+    if (file.type.includes('text')) {
+      handleTextFileChange(event)
+    }
+  }
+
+  const handleTextFileChange = (event: any) => {
+    console.log('handleTextFileChange')
+    const [file] = event.target.files
+    fileNameRef.current = file.name
+
+    const ext = file.name.match(/\.(\w+)$/)
+
+    console.log(ext)
+  }
+
+  const handleImageFileChange = (event: any) => {
     const [file] = event.target.files
     fileNameRef.current = file.name
 
