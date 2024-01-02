@@ -1,35 +1,62 @@
 import { Button, Modal, message } from 'antd'
-import { createRef, useEffect, useRef, useState } from 'react'
+import { createRef, useRef, useState } from 'react'
 import Cropper, { ReactCropperElement } from 'react-cropper'
-import { FaUpload } from 'react-icons/fa'
+import { FaFileImage } from 'react-icons/fa'
 
 import { upload } from '@/api/user'
 import { dataURLtoBlob } from '@/utils'
+import { CharCard, importCharacter } from '@/utils/char-card'
 
 export type Props = {
-  avatar: string
   setAvatar: (value: string) => void
-  width?: string
-  height?: string
+  setBotName: (value: string) => void
+  setBotIntro: (value: string) => void
+  setBotTags: (value: never[]) => void
+  setBotGreeting: (value: string) => void
+  setBotPersona: (value: string) => void
+  setBotSce: (value: string) => void
 }
 
-export function AvatarUpload({
-  avatar,
+export function CardImport({
   setAvatar,
-  width = '120px',
-  height = '160px',
+  setBotName,
+  setBotIntro,
+  setBotTags,
+  setBotGreeting,
+  setBotPersona,
+  setBotSce,
 }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
 
   const [image, setImage] = useState('')
-  const [cropperImage, setCropperImage] = useState(avatar)
   const [open, setOpen] = useState(false)
-  const [hover, setHover] = useState(false)
   const [loading, setLoading] = useState(false)
 
   function handleFileChange(event: any) {
+    const [file] = event.target.files
+    fileNameRef.current = file.name
+
+    const ext = file.name.match(/\.(\w+)$/)
+    if (
+      !ext ||
+      !['json', 'png', 'yaml', 'yml'].includes(ext[1].toLowerCase())
+    ) {
+      message.error('Please import your JSON file / PNG file / character card.')
+      return
+    }
+
+    const format = ext[1].toLowerCase()
+
+    handleCharCard(file, format)
+
+    if (file.type.includes('image')) {
+      handleImageFileChange(event)
+    }
+  }
+
+  const handleImageFileChange = (event: any) => {
     const [file] = event.target.files
     fileNameRef.current = file.name
 
@@ -55,6 +82,24 @@ export function AvatarUpload({
     event.target.value = ''
   }
 
+  const handleCharCard = async (filedata: File, format: string) => {
+    const charCard: CharCard | undefined = await importCharacter(
+      filedata,
+      format,
+    )
+    if (!charCard) {
+      message.error('Failed to read character file')
+      return
+    }
+
+    setBotName(charCard.name)
+    setBotIntro(charCard.intro)
+    setBotTags(charCard.tags)
+    setBotGreeting(charCard.greeting)
+    setBotPersona(charCard.personality)
+    setBotSce(charCard.scenario)
+  }
+
   const getCropData = async () => {
     if (typeof cropperRef.current?.cropper !== 'undefined') {
       const dataURL = cropperRef.current.cropper.getCroppedCanvas().toDataURL()
@@ -63,7 +108,6 @@ export function AvatarUpload({
       setLoading(true)
       try {
         const { url } = await upload(file)
-        setCropperImage(dataURL)
         setAvatar(url)
         setOpen(false)
       } finally {
@@ -72,22 +116,16 @@ export function AvatarUpload({
     }
   }
 
-  function renderUploadButton() {
+  function renderImportButton() {
     return (
       <Button
         onClick={() => fileRef.current?.click()}
         className="h-34px flex-center text-12px mt-2 text-pink-500"
       >
-        <FaUpload className="mr-2 h-4 w-4" /> Upload
+        <FaFileImage className="mr-2 h-4 w-4" /> Import file
       </Button>
     )
   }
-
-  useEffect(() => {
-    if (avatar) {
-      setCropperImage(avatar)
-    }
-  }, [avatar])
 
   return (
     <>
@@ -97,29 +135,7 @@ export function AvatarUpload({
         onChange={handleFileChange}
         className="hidden!"
       />
-      <div
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        style={{ width, height }}
-        className="border-1 flex-center relative border-dashed border-gray-300 bg-gray-50 dark:bg-gray-800"
-      >
-        {avatar ? (
-          <>
-            <img
-              src={cropperImage}
-              className="absolute bottom-0 left-0 right-0 top-0 h-full"
-            />
-            {hover && (
-              <>
-                <div className="absolute bottom-0 left-0 right-0 top-0 h-full bg-black/60"></div>
-                {renderUploadButton()}
-              </>
-            )}
-          </>
-        ) : (
-          renderUploadButton()
-        )}
-      </div>
+      {renderImportButton()}
 
       <Modal open={open} footer={null} onCancel={() => setOpen(false)}>
         <div className="flex grid flex-col items-center gap-6">
@@ -146,7 +162,7 @@ export function AvatarUpload({
             onClick={getCropData}
             className="h-48px text-16px font-500 w-full"
           >
-            Upload
+            Import file
           </Button>
         </div>
       </Modal>

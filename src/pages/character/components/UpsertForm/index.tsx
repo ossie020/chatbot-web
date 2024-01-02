@@ -1,15 +1,16 @@
 import { Button, Form, Input, Radio, Select, message } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { createCharacter } from '@/api/character'
+import { createChatKey } from '@/api/chat'
 import Magic from '@/assets/svg/magic.svg'
 import { AvatarUpload } from '@/components/AvatarUpload'
+import { CardImport } from '@/components/CardImport'
 import { useAppStore } from '@/stores/app'
 import { useCharacterStore } from '@/stores/character'
 
 import { extras } from './Extra'
-import { createChatKey } from '@/api/chat'
 
 const { Item: FormItem, useForm } = Form
 const { Option } = Select
@@ -24,16 +25,51 @@ export function UpsertForm() {
   const [form] = useForm()
   const [avatar, setAvatar] = useState('')
   const [loading, setLoading] = useState(false)
+  const [botName, setBotName] = useState('') // Name
+  const [botIntro, setBotIntro] = useState('') // Introduction
+  const [botTags, setBotTags] = useState([]) // Tags
+  const [botGreeting, setBotGreeting] = useState('') // Greeting
+  const [botPersona, setBotPersona] = useState('') // Personality
+  const [botSce, setBotSce] = useState('') // Scenario
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
   }, [])
+
+  useEffect(() => {
+    form.setFieldsValue({ name: botName })
+  }, [botName])
+
+  useEffect(() => {
+    form.setFieldsValue({ introduction: botIntro })
+  }, [botIntro])
+
+  useEffect(() => {
+    form.setFieldsValue({ tags: botTags })
+  }, [botTags])
+
+  useEffect(() => {
+    form.setFieldsValue({ greeting: botGreeting })
+  }, [botGreeting])
+
+  useEffect(() => {
+    form.setFieldsValue({ personality: botPersona })
+  }, [botPersona])
+
+  useEffect(() => {
+    form.setFieldsValue({ personality: botPersona })
+  }, [botPersona])
+
+  useEffect(() => {
+    form.setFieldsValue({ scenario: botSce })
+  }, [botSce])
 
   async function submit() {
     setLoading(true)
 
     try {
       const data = await form.validateFields()
+      console.log('data', data)
 
       if (!avatar) {
         message.error('Please upload avatar')
@@ -67,6 +103,18 @@ export function UpsertForm() {
   return (
     <>
       <Form form={form} layout="vertical">
+        <FormItem label="Quick Start" extra={extras.quickStart}>
+          <CardImport
+            setAvatar={setAvatar}
+            setBotName={setBotName}
+            setBotIntro={setBotIntro}
+            setBotTags={setBotTags}
+            setBotGreeting={setBotGreeting}
+            setBotPersona={setBotPersona}
+            setBotSce={setBotSce}
+          />
+        </FormItem>
+
         <FormItem
           label="Name"
           name="name"

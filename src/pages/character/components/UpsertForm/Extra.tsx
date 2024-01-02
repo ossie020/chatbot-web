@@ -1,4 +1,5 @@
 export const extras = {
+  quickStart: `Import your JSON file / PNG file / Character card. For more information, please consult the JSON or PNG files guide for character creation.`,
   userName: `Name your character, and you can change it later if needed.`,
   avatar: `Upload your character's avatar.`,
   visibility: `Who is authorized to talk to them?`,
