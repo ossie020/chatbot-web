@@ -1,5 +1,5 @@
 import { Button, Modal, message } from 'antd'
-import { createRef, useRef, useState } from 'react'
+import { createRef, useEffect, useRef, useState } from 'react'
 import Cropper, { ReactCropperElement } from 'react-cropper'
 import { FaUpload } from 'react-icons/fa'
 
@@ -82,6 +82,12 @@ export function AvatarUpload({
       </Button>
     )
   }
+
+  useEffect(() => {
+    if (avatar) {
+      setCropperImage(avatar)
+    }
+  }, [avatar])
 
   return (
     <>
