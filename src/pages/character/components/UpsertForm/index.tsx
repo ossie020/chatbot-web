@@ -29,6 +29,7 @@ export function UpsertForm() {
   const [botIntro, setBotIntro] = useState('')
   const [botTags, setBotTags] = useState([])
   const [botGreeting, setBotGreeting] = useState('')
+  const [botPersona, setBotPersona] = useState('')
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
@@ -49,6 +50,10 @@ export function UpsertForm() {
   useEffect(() => {
     form.setFieldsValue({ greeting: botGreeting })
   }, [botGreeting])
+
+  useEffect(() => {
+    form.setFieldsValue({ personality: botPersona })
+  }, [botPersona])
 
   async function submit() {
     setLoading(true)
@@ -96,6 +101,7 @@ export function UpsertForm() {
             setBotIntro={setBotIntro}
             setBotTags={setBotTags}
             setBotGreeting={setBotGreeting}
+            setBotPersona={setBotPersona}
           />
         </FormItem>
 
