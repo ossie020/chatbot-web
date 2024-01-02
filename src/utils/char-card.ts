@@ -5,7 +5,7 @@ import extract from 'png-chunks-extract'
 export type CharCard = {
   name: string
   intro: string
-  tags: string[]
+  tags: never[]
   greeting: string
   personality: string
   scenario: string

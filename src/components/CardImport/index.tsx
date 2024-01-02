@@ -11,9 +11,15 @@ export type Props = {
   setAvatar: (value: string) => void
   setBotName: (value: string) => void
   setBotIntro: (value: string) => void
+  setBotTags: (value: never[]) => void
 }
 
-export function CardImport({ setAvatar, setBotName, setBotIntro }: Props) {
+export function CardImport({
+  setAvatar,
+  setBotName,
+  setBotIntro,
+  setBotTags,
+}: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
@@ -82,6 +88,7 @@ export function CardImport({ setAvatar, setBotName, setBotIntro }: Props) {
 
     setBotName(charCard.name)
     setBotIntro(charCard.intro)
+    setBotTags(charCard.tags)
   }
 
   const getCropData = async () => {
