@@ -12,6 +12,7 @@ export type Props = {
   setBotName: (value: string) => void
   setBotIntro: (value: string) => void
   setBotTags: (value: never[]) => void
+  setBotGreeting: (value: string) => void
 }
 
 export function CardImport({
@@ -19,6 +20,7 @@ export function CardImport({
   setBotName,
   setBotIntro,
   setBotTags,
+  setBotGreeting,
 }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
@@ -89,6 +91,7 @@ export function CardImport({
     setBotName(charCard.name)
     setBotIntro(charCard.intro)
     setBotTags(charCard.tags)
+    setBotGreeting(charCard.greeting)
   }
 
   const getCropData = async () => {
