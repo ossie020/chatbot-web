@@ -8,26 +8,18 @@ import { dataURLtoBlob } from '@/utils'
 import { importCharacter } from '@/utils/char-card'
 
 export type Props = {
-  avatar: string
   setAvatar: (value: string) => void
   width?: string
   height?: string
 }
 
-export function CardImport({
-  avatar,
-  setAvatar,
-  width = '120px',
-  height = '160px',
-}: Props) {
+export function CardImport({ setAvatar }: Props) {
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
 
   const [image, setImage] = useState('')
-  const [cropperImage, setCropperImage] = useState(avatar)
   const [open, setOpen] = useState(false)
-  const [hover, setHover] = useState(false)
   const [loading, setLoading] = useState(false)
 
   function handleFileChange(event: any) {
@@ -100,7 +92,6 @@ export function CardImport({
       setLoading(true)
       try {
         const { url } = await upload(file)
-        setCropperImage(dataURL)
         setAvatar(url)
         setOpen(false)
       } finally {

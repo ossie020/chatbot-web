@@ -69,7 +69,7 @@ export function UpsertForm() {
     <>
       <Form form={form} layout="vertical">
         <FormItem label="Quick Start" extra={extras.quickStart}>
-          <CardImport avatar={avatar} setAvatar={setAvatar} />
+          <CardImport setAvatar={setAvatar} />
         </FormItem>
 
         <FormItem
