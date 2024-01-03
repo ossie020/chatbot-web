@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { type Character, getChatKey } from '@/api/character'
 import { createChatKey } from '@/api/chat'
+import { formatLargeNumber } from '@/utils'
 
 export function CharacterCard(character: Character) {
   const { id, avatar, name, likes_count, talks_count, introduction, user } =
@@ -47,11 +48,11 @@ export function CharacterCard(character: Character) {
           <div className="flex items-center text-pink-500">
             <div className="border-1 flex items-center rounded-full border-solid border-pink-500 px-1">
               <HiOutlineFire className="h-3 w-3" />
-              <p className="text-10px ml-1">{talks_count}</p>
+              <p className="text-10px ml-1">{formatLargeNumber(talks_count)}</p>
             </div>
             <div className="border-1 ml-1 flex items-center rounded-full border-solid border-pink-500 px-1">
               <HiOutlineHeart className="h-3 w-3" />
-              <p className="text-10px ml-1">{likes_count}</p>
+              <p className="text-10px ml-1">{formatLargeNumber(likes_count)}</p>
             </div>
           </div>
           <div className="flex items-center">

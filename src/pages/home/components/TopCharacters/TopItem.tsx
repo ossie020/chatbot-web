@@ -5,6 +5,7 @@ import { Character, getChatKey } from '@/api/character'
 import { createChatKey } from '@/api/chat'
 import Star from '@/assets/svg/star.svg'
 import { useAppStore } from '@/stores/app'
+import { formatLargeNumber } from '@/utils'
 import { LoginModalState } from '@/utils/enums'
 
 type Props = Character & {
@@ -55,9 +56,9 @@ export function TopItem(character: Props) {
           <p className="text-sm">{name}</p>
           <div className="mt-1 flex items-center gap-x-1 text-xs text-pink-500">
             <HiFire />
-            <p>{talks_count}</p>
+            <p>{formatLargeNumber(talks_count)}</p>
             <HiHeart />
-            <p>{likes_count}</p>
+            <p>{formatLargeNumber(likes_count)}</p>
           </div>
         </div>
         <div className="relative flex-center h-8 w-8 text-sm text-white">
