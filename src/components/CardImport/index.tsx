@@ -4,6 +4,7 @@ import Cropper, { ReactCropperElement } from 'react-cropper'
 import { FaFileImage } from 'react-icons/fa'
 
 import { upload } from '@/api/user'
+import { useAppStore } from '@/stores/app'
 import { dataURLtoBlob } from '@/utils'
 import { CharCard, importCharacter } from '@/utils/char-card'
 
@@ -11,14 +12,14 @@ export type Props = {
   setAvatar: (value: string) => void
   setBotName: (value: string) => void
   setBotIntro: (value: string) => void
-  setBotTags: (value: never[]) => void
+  setBotTags: (value: string[]) => void
   setBotGreeting: (value: string) => void
   setBotPersona: (value: string) => void
   setBotSce: (value: string) => void
   setBotExDialogs: (value: string) => void
 }
 
-export function CardImport({
+export const CardImport = ({
   setAvatar,
   setBotName,
   setBotIntro,
@@ -27,7 +28,9 @@ export function CardImport({
   setBotPersona,
   setBotSce,
   setBotExDialogs,
-}: Props) {
+}: Props) => {
+  const { allTagList } = useAppStore()
+
   const fileRef = useRef<HTMLInputElement | null>(null)
   const fileNameRef = useRef('')
   const cropperRef = createRef<ReactCropperElement>()
@@ -36,7 +39,7 @@ export function CardImport({
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  function handleFileChange(event: any) {
+  const handleFileChange = (event: any) => {
     const [file] = event.target.files
     fileNameRef.current = file.name
 
@@ -88,6 +91,7 @@ export function CardImport({
     const charCard: CharCard | undefined = await importCharacter(
       filedata,
       format,
+      allTagList,
     )
     if (!charCard) {
       message.error('Failed to read character file')
@@ -119,7 +123,7 @@ export function CardImport({
     }
   }
 
-  function renderImportButton() {
+  const renderImportButton = () => {
     return (
       <Button
         onClick={() => fileRef.current?.click()}

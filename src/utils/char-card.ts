@@ -2,10 +2,12 @@ import { Buffer } from 'buffer'
 import PNGtext from 'png-chunk-text'
 import extract from 'png-chunks-extract'
 
+import { Tag } from '@/api/character'
+
 export type CharCard = {
   name: string
   intro: string
-  tags: never[]
+  tags: string[]
   greeting: string
   personality: string
   scenario: string
@@ -15,6 +17,7 @@ export type CharCard = {
 export const importCharacter = async (
   filedata: File,
   format: string,
+  allTagList: Tag[],
 ): Promise<CharCard | undefined> => {
   let jsonObj
   if (format == 'json') {
@@ -34,13 +37,13 @@ export const importCharacter = async (
 
   const filename = filedata.name.toLowerCase().replace(`.${format}`, '')
   if (filename.endsWith('_spec_v2')) {
-    return parseCharaV2(jsonObj)
+    return parseCharaV2(jsonObj, allTagList)
   } else if (filename.endsWith('_spec_v1')) {
-    return parseCharaV1(jsonObj)
+    return parseCharaV1(jsonObj, allTagList)
   } else if (filename.endsWith('_tavern')) {
-    return parseTavern(jsonObj)
+    return parseTavern(jsonObj, allTagList)
   } else {
-    return parseCharaV2(jsonObj)
+    return parseCharaV2(jsonObj, allTagList)
   }
 }
 
@@ -83,11 +86,11 @@ const parseText = async (filedata: File, format: string) => {
 }
 
 // tavern
-const parseTavern = (jsonObj: any): CharCard => {
+const parseTavern = (jsonObj: any, allTagList: Tag[]): CharCard => {
   return {
     name: jsonObj.name || '',
     intro: jsonObj.creator_notes || '',
-    tags: jsonObj.tags || [''],
+    tags: checkTags(jsonObj.tags, allTagList) || [],
     greeting: jsonObj.first_mes || '',
     personality: jsonObj.description || '',
     scenario: jsonObj.scenario || '',
@@ -96,12 +99,12 @@ const parseTavern = (jsonObj: any): CharCard => {
 }
 
 // chara_card_v2
-const parseCharaV2 = (jsonObj: any): CharCard => {
+const parseCharaV2 = (jsonObj: any, allTagList: Tag[]): CharCard => {
   jsonObj.data = jsonObj.data || {}
   return {
     name: jsonObj.data.name || '',
     intro: jsonObj.data.creator_notes || '',
-    tags: jsonObj.data.tags || [''],
+    tags: checkTags(jsonObj.data.tags, allTagList) || [],
     greeting: jsonObj.data.first_mes || '',
     personality: jsonObj.data.description || '',
     scenario: jsonObj.data.scenario || '',
@@ -110,7 +113,26 @@ const parseCharaV2 = (jsonObj: any): CharCard => {
 }
 
 // chara_card_v1
-const parseCharaV1 = (jsonObj: any): CharCard => {
+const parseCharaV1 = (jsonObj: any, allTagList: Tag[]): CharCard => {
   //TODO:
-  return parseCharaV2(jsonObj)
+  return parseCharaV2(jsonObj, allTagList)
+}
+
+const checkTags = (tags: string[], allTagList: Tag[]): string[] => {
+  const resTags = []
+  for (const tag of tags) {
+    const resTag = checkTag(tag, allTagList)
+    if (resTag) {
+      resTags.push(resTag.name)
+    }
+  }
+  return resTags
+}
+
+const checkTag = (tag: string, allTagList: Tag[]): Tag | undefined => {
+  for (const t of allTagList) {
+    if (t.name.toLowerCase() === tag.toLowerCase()) {
+      return t
+    }
+  }
 }
