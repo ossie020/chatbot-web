@@ -86,10 +86,10 @@ const parseText = async (filedata: File, format: string) => {
 const parseTavern = (jsonObj: any): CharCard => {
   return {
     name: jsonObj.name || '',
-    intro: jsonObj.description || '',
+    intro: jsonObj.creator_notes || '',
     tags: jsonObj.tags || [''],
     greeting: jsonObj.first_mes || '',
-    personality: jsonObj.personality || '',
+    personality: jsonObj.description || '',
     scenario: jsonObj.scenario || '',
     example_dialogs: jsonObj.mes_example || '',
   }
@@ -100,10 +100,10 @@ const parseCharaV2 = (jsonObj: any): CharCard => {
   jsonObj.data = jsonObj.data || {}
   return {
     name: jsonObj.data.name || '',
-    intro: jsonObj.data.description || '',
+    intro: jsonObj.data.creator_notes || '',
     tags: jsonObj.data.tags || [''],
     greeting: jsonObj.data.first_mes || '',
-    personality: jsonObj.data.personality || '',
+    personality: jsonObj.data.description || '',
     scenario: jsonObj.data.scenario || '',
     example_dialogs: jsonObj.data.mes_example || '',
   }
