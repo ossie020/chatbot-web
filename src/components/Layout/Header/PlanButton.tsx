@@ -2,9 +2,9 @@ import { Button } from 'antd'
 import { HiChevronDoubleUp } from 'react-icons/hi'
 
 import { useAppStore } from '@/stores/app'
+import { LoginModalState } from '@/utils/enums'
 
 import { PlanModal } from './PlanModal'
-import { LoginModalState } from '@/utils/enums'
 
 export function PlanButton() {
   const { user, setLoginModalState, planOpen, setPlanOpen } = useAppStore()
