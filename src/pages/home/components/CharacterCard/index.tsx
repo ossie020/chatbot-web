@@ -1,11 +1,12 @@
+import { useRef } from 'react'
 import { HiOutlineFire, HiOutlineHeart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 import { type Character, getChatKey } from '@/api/character'
-import { useAppStore } from '@/stores/app'
-import { LoginModalState } from '@/utils/enums'
 import { createChatKey } from '@/api/chat'
-import { useRef } from 'react'
+import { useAppStore } from '@/stores/app'
+import { formatLargeNumber } from '@/utils'
+import { LoginModalState } from '@/utils/enums'
 
 export function CharacterCard(character: Character) {
   const { user: authedUser, setLoginModalState } = useAppStore()
@@ -53,11 +54,11 @@ export function CharacterCard(character: Character) {
         <div className="flex items-center text-pink-500">
           <div className="flex items-center rounded-full bg-white px-1">
             <HiOutlineFire className="h-3 w-3" />
-            <p className="text-10px ml-1">{talks_count}</p>
+            <p className="text-10px ml-1">{formatLargeNumber(talks_count)}</p>
           </div>
           <div className="ml-6px flex items-center rounded-full bg-white px-1">
             <HiOutlineHeart className="h-3 w-3" />
-            <p className="text-10px ml-1">{likes_count}</p>
+            <p className="text-10px ml-1">{formatLargeNumber(likes_count)}</p>
           </div>
         </div>
         <div className="flex items-center">

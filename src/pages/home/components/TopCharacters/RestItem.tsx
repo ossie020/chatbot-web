@@ -2,9 +2,10 @@ import { HiOutlineFire, HiOutlineHeart } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 import { Character, getChatKey } from '@/api/character'
-import { useAppStore } from '@/stores/app'
-import { LoginModalState } from '@/utils/enums'
 import { createChatKey } from '@/api/chat'
+import { useAppStore } from '@/stores/app'
+import { formatLargeNumber } from '@/utils'
+import { LoginModalState } from '@/utils/enums'
 
 type Props = Character & {
   rank: number
@@ -41,9 +42,9 @@ export function RestItem(character: Props) {
       </div>
       <div className="flex items-center gap-x-1 text-xs text-pink-500">
         <HiOutlineFire />
-        <p>{talks_count}</p>
+        <p>{formatLargeNumber(talks_count)}</p>
         <HiOutlineHeart />
-        <p>{likes_count}</p>
+        <p>{formatLargeNumber(likes_count)}</p>
       </div>
     </div>
   )

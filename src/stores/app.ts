@@ -36,14 +36,15 @@ export const [useAppStore, getAppStore] = createGlobalStore(() => {
 
   async function init() {
     try {
-      const _user = await getUser()
-      setUser(_user)
-
-      getUserPlan().then((data) => setPlan(data))
       listTag().then((data) => {
         allTagsRef.current = data
         setAllTagList(data)
       })
+
+      const _user = await getUser()
+      setUser(_user)
+
+      getUserPlan().then((data) => setPlan(data))
     } finally {
       const currentMode = initDarkMode()
       setDarkMode(currentMode)

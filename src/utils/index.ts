@@ -1,3 +1,5 @@
+import numeral from 'numeral'
+
 import { KEYS } from './constants'
 
 export function initDarkMode() {
@@ -66,4 +68,8 @@ export function debounce(fn: (...arg: any[]) => any, duration: number = 300) {
       timer = -1
     }, duration)
   }
+}
+
+export function formatLargeNumber(num: number = 0) {
+  return numeral(num).format('0.[000]a').toUpperCase()
 }

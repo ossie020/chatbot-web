@@ -22,7 +22,7 @@ export function MessageBox({ type, message, isLastChatbot }: Props) {
   const avatar = isChatbot ? character.avatar : user.avatar
   const direction = isChatbot ? 'flex-row' : 'flex-row-reverse'
   const msgClass = isChatbot
-    ? 'text-white bg-black/20 rounded-tr-3xl'
+    ? 'text-white bg-black/20 rounded-tr-3xl mt-2 border-1px border-pink500'
     : 'text-black bg-white rounded-tl-3xl max-w-480px break-all'
   const emClass = isChatbot ? 'text-#FFFFFFCC' : 'test-gray-900'
 
@@ -33,7 +33,7 @@ export function MessageBox({ type, message, isLastChatbot }: Props) {
           src={character.avatar}
           className="h-64px w-64px min-w-64px rounded-full object-cover"
         />
-        <div className="px-16px py-9px rounded-bl-3xl rounded-br-3xl backdrop-blur-md text-white bg-black/20 rounded-tr-3xl flex-center">
+        <div className="mt-2 px-16px py-9px rounded-bl-3xl rounded-br-3xl backdrop-blur-md text-white bg-black/20 rounded-tr-3xl flex-center">
           <ChatLoading />
         </div>
       </div>
