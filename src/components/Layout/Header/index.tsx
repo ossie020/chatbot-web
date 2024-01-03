@@ -25,7 +25,7 @@ export function Header() {
 
       <div className="flex h-full items-center sm:gap-x-6 lg:gap-x-3">
         <SearchInput />
-        <TwitterButton />
+        {/* <TwitterButton /> */}
         <DiscordButton />
         <ThemeButton />
         <PlanButton />
