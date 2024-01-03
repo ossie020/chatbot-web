@@ -2,10 +2,12 @@ import { useNavigate } from 'react-router-dom'
 
 import { Logo } from '@/components/Logo'
 
+import { DiscordButton } from './DiscordButton'
 import { LoginModal } from './LoginModal'
 import { PlanButton } from './PlanButton'
 import { SearchInput } from './SearchInput'
 import { ThemeButton } from './ThemeButton'
+import { TwitterButton } from './TwitterButton'
 import { UserDesktop } from './UserDesktop'
 import { UserMobile } from './UserMobile'
 
@@ -23,6 +25,8 @@ export function Header() {
 
       <div className="flex h-full items-center sm:gap-x-6 lg:gap-x-3">
         <SearchInput />
+        <TwitterButton />
+        <DiscordButton />
         <ThemeButton />
         <PlanButton />
 
