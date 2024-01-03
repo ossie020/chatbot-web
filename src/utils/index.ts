@@ -1,5 +1,7 @@
 import numeral from 'numeral'
 
+import { Character } from '@/api/character'
+
 import { KEYS } from './constants'
 
 export function initDarkMode() {
@@ -72,4 +74,13 @@ export function debounce(fn: (...arg: any[]) => any, duration: number = 300) {
 
 export function formatLargeNumber(num: number = 0) {
   return numeral(num).format('0.[000]a').toUpperCase()
+}
+
+export function filterCharacterList(list: Character[] = []) {
+  const map = list.reduce((map, item) => {
+    map.set(item.id, item)
+    return map
+  }, new Map<string, Character>())
+
+  return [...map.values()]
 }
