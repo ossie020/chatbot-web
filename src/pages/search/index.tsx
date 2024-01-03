@@ -1,18 +1,16 @@
-import { ConfigProvider, Input } from 'antd'
+import { Input } from 'antd'
 import { useState } from 'react'
 import { HiChevronLeft, HiSearch } from 'react-icons/hi'
 import { useNavigate } from 'react-router-dom'
 
 import { Character, searchCharacter } from '@/api/character'
-import { useAppStore } from '@/stores/app'
-import { darkTheme, theme } from '@/utils/antd'
+import { DataLoading } from '@/components/Lottie/DataLoading'
+import { filterCharacterList } from '@/utils'
 
 import { CharacterCard } from './components/CharacterCard'
-import { DataLoading } from '@/components/Lottie/DataLoading'
 
 export default function Search() {
   const navigate = useNavigate()
-  const { darkMode } = useAppStore()
 
   const [characterList, setCharacterList] = useState<Character[]>([])
   const [keyword, setKeyword] = useState('')
@@ -24,13 +22,15 @@ export default function Search() {
     }
 
     setLoading(true)
-    const { introduction, name, tag } = await searchCharacter(keyword)
-    setCharacterList([...introduction, ...name, ...tag])
+    const { introduction, name, tag, rating } = await searchCharacter(keyword)
+    setCharacterList(
+      filterCharacterList([...introduction, ...name, ...tag, ...rating]),
+    )
     setLoading(false)
   }
 
   return (
-    <ConfigProvider theme={darkMode ? darkTheme : theme}>
+    <>
       <div className="h-72px border-b-1 flex-center fixed left-0 top-0 w-full border-gray-200 bg-white p-4 dark:border-b-gray-500 dark:bg-gray-800">
         <HiChevronLeft
           onClick={() => navigate(-1)}
@@ -47,10 +47,14 @@ export default function Search() {
       </div>
 
       <div className="lg:w-1024px md:w-768px sm:w-390px xl:w-1440px flex-center mx-auto mt-24 mb-6 grid gap-3">
-        {loading ? <DataLoading/> : characterList.map((character) => (
-          <CharacterCard key={character.id} {...character} />
-        ))}
+        {loading ? (
+          <DataLoading />
+        ) : (
+          characterList.map((character) => (
+            <CharacterCard key={character.id} {...character} />
+          ))
+        )}
       </div>
-    </ConfigProvider>
+    </>
   )
 }

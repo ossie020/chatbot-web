@@ -93,6 +93,7 @@ export async function searchCharacter(keyword: string) {
     introduction: Character[]
     name: Character[]
     tag: Character[]
+    rating: Character[]
   }>('/search/', {
     info: keyword,
   })
