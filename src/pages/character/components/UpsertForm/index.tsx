@@ -31,6 +31,7 @@ export function UpsertForm() {
   const [botGreeting, setBotGreeting] = useState('') // Greeting
   const [botPersona, setBotPersona] = useState('') // Personality
   const [botSce, setBotSce] = useState('') // Scenario
+  const [botExDialogs, setBotExDialogs] = useState('') // Example dialogs
 
   useEffect(() => {
     form.setFieldsValue({ visibility: 'public' })
@@ -63,6 +64,10 @@ export function UpsertForm() {
   useEffect(() => {
     form.setFieldsValue({ scenario: botSce })
   }, [botSce])
+
+  useEffect(() => {
+    form.setFieldsValue({ example_dialogs: botExDialogs })
+  }, [botExDialogs])
 
   async function submit() {
     setLoading(true)
@@ -112,6 +117,7 @@ export function UpsertForm() {
             setBotGreeting={setBotGreeting}
             setBotPersona={setBotPersona}
             setBotSce={setBotSce}
+            setBotExDialogs={setBotExDialogs}
           />
         </FormItem>
 

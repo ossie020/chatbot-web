@@ -9,6 +9,7 @@ export type CharCard = {
   greeting: string
   personality: string
   scenario: string
+  example_dialogs: string
 }
 
 export const importCharacter = async (
@@ -90,6 +91,7 @@ const parseTavern = (jsonObj: any): CharCard => {
     greeting: jsonObj.first_mes || '',
     personality: jsonObj.personality || '',
     scenario: jsonObj.scenario || '',
+    example_dialogs: jsonObj.mes_example || '',
   }
 }
 
@@ -103,6 +105,7 @@ const parseCharaV2 = (jsonObj: any): CharCard => {
     greeting: jsonObj.data.first_mes || '',
     personality: jsonObj.data.personality || '',
     scenario: jsonObj.data.scenario || '',
+    example_dialogs: jsonObj.data.mes_example || '',
   }
 }
 
